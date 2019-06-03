@@ -1,108 +1,37 @@
 <div class="example-container" [class.example-is-mobile]="mobileQuery.matches" > 
-  <mat-toolbar class="example-toolbar" style="background: #273746" color="primary">
-      <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
-      SCEF
-    </mat-toolbar>     
-<mat-sidenav-container class="example-sidenav-container"
-                       [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-  <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
-               [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">   
-  <div class="example-form">
-      <mat-form-field appearance="fill">
-          <mat-label>BUSCADOR</mat-label>
-              <input matInput>                                                                                        
-      </mat-form-field>
-      <button mat-icon-button>
-          <mat-icon matSuffix>search</mat-icon>
-      </button>                
-  </div>  
-    <mat-nav-list>                               
- <!-- A -->     
-        <a mat-list-item routerLink="almacenadora"><mat-icon mat-list-icon>folder</mat-icon><h3>Alamacenadora</h3></a>
-        <a mat-list-item routerLink="aseguradora"><mat-icon mat-list-icon>folder</mat-icon><h3>Aseguradoras</h3></a>
-        <a mat-list-item routerLink="agrupacionCredito"><mat-icon mat-list-icon>folder</mat-icon><h3>Agrupacion de Creditos</h3></a>
-        <a mat-list-item routerLink="acercamiento"><mat-icon mat-list-icon>folder</mat-icon><h3>Acercamiento</h3></a>
-        <a mat-list-item routerLink="acesoresPrestamos"><mat-icon mat-list-icon>folder</mat-icon><h3>Acesores de Prestamos</h3></a>
-        <a mat-list-item routerLink="archivosLimpieza"><mat-icon mat-list-icon>folder</mat-icon><h3>Archivos de Limpieza</h3></a>
-        <a mat-list-item routerLink="asignacionCategorias"><mat-icon mat-list-icon>folder</mat-icon><h3>Asignacion de Categorias</h3></a>
-<!-- B -->
-        <a mat-list-item routerLink="bancos"><mat-icon mat-list-icon>folder</mat-icon><h3>Bancos</h3></a>
-<!-- C -->
-        <a mat-list-item routerLink="categoriasSIB"><mat-icon mat-list-icon>folder</mat-icon><h3>categoriasSIB</h3></a>
-        <a mat-list-item routerLink="definirCategoriaUsuario"><mat-icon mat-list-icon>folder</mat-icon><h3>Categoria de Usuario</h3></a>
-        <a mat-list-item routerLink="copiarParametrosProductos"><mat-icon mat-list-icon>folder</mat-icon><h3>Copiar Parametros del Producto</h3></a>
-        <a mat-list-item routerLink="canalesVenta"><mat-icon mat-list-icon>folder</mat-icon><h3>Canales de Venta</h3></a>
-        <a mat-list-item routerLink="clasificacion"><mat-icon mat-list-icon>folder</mat-icon><h3>Clasificacion</h3></a>
-        <a mat-list-item routerLink="cobrosAdicionales"><mat-icon mat-list-icon>folder</mat-icon><h3>Cobros Adicionales</h3></a>
-        <a mat-list-item routerLink="consultas"><mat-icon mat-list-icon>folder</mat-icon><h3>Consultas</h3></a>
-        <a mat-list-item routerLink="contenidoContable"><mat-icon mat-list-icon>folder</mat-icon><h3>Contenido Contable</h3></a>
-<!-- D -->
-        <a mat-list-item routerLink="datosGeneralesRC"><mat-icon mat-list-icon>folder</mat-icon><h3>Datos de Generales de Registro y Control</h3></a>        
-        <a mat-list-item routerLink="destinos"><mat-icon mat-list-icon>folder</mat-icon><h3>Destinos</h3></a>
-        <a mat-list-item routerLink="diasInhabiles"><mat-icon mat-list-icon>folder</mat-icon><h3>Dias Inhabilies</h3></a>
-        <a mat-list-item routerLink="documentosProducto"><mat-icon mat-list-icon>folder</mat-icon><h3>Documentos por Producto</h3></a>
-<!-- E -->
-        <a mat-list-item routerLink="enlaceContablidad"><mat-icon mat-list-icon>folder</mat-icon><h3>Enlace de Contablidad</h3></a>
-        <a mat-list-item routerLink="estadosPrestamos"><mat-icon mat-list-icon>folder</mat-icon><h3>Estados de Prestamos</h3></a>        
-        <a mat-list-item routerLink="estatusAvaluos"><mat-icon mat-list-icon>folder</mat-icon><h3>Estatus de Avaluos</h3></a>        
-        <a mat-list-item routerLink="estatusGarantiaReal"><mat-icon mat-list-icon>folder</mat-icon><h3>Estatus de Garantia Real</h3></a>
-        <a mat-list-item routerLink="estatusLegales"><mat-icon mat-list-icon>folder</mat-icon><h3>Estatus Legal</h3></a>
-        <a mat-list-item routerLink="eventosSolicitudes"><mat-icon mat-list-icon>folder</mat-icon><h3>Eventos de Solicitudes</h3></a>
-<!-- F -->
-        <a mat-list-item routerLink="frecuenciasAmortizacion"><mat-icon mat-list-icon>folder</mat-icon><h3>Frecuencias de Amortizacion</h3></a>
-        <a mat-list-item routerLink="formasDesembolso"><mat-icon mat-list-icon>folder</mat-icon><h3>Formas de Desembolso</h3></a>
-        <a mat-list-item routerLink="formasPago"><mat-icon mat-list-icon>folder</mat-icon><h3>Formas de Pago</h3></a>
-<!-- G -->
-        <a mat-list-item routerLink="garantiasContables"><mat-icon mat-list-icon>folder</mat-icon><h3>Garantias Contables</h3></a>
-<!-- H -->
-<!-- I -->
-        <a mat-list-item routerLink="ingenierosValuadores"><mat-icon mat-list-icon>folder</mat-icon><h3>Ingenieros Valuadores</h3></a>
-        <a mat-list-item routerLink="institucionesCobroAdicional"><mat-icon mat-list-icon>folder</mat-icon><h3>Instituciones de Cobro Adicional</h3></a>
-<!-- J -->
-<!-- K -->
-<!-- L -->
-        <a mat-list-item routerLink="limpiezaArchivos"><mat-icon mat-list-icon>folder</mat-icon><h3>Limpieza de Archivos</h3></a>
-        <a mat-list-item routerLink="lugaresInversion"><mat-icon mat-list-icon>folder</mat-icon><h3>Lugares de Inversion</h3></a>
-<!-- M -->
-        <a mat-list-item routerLink="montosPlazo"><mat-icon mat-list-icon>folder</mat-icon><h3>Montos de Plazo</h3></a>
-        <a mat-list-item routerLink="motivosAjuste"><mat-icon mat-list-icon>folder</mat-icon><h3>Motivos de Ajuste</h3></a>      
-        <a mat-list-item routerLink="motivosReserva"><mat-icon mat-list-icon>folder</mat-icon><h3>Motivos de Reserva</h3></a>        
-        <a mat-list-item routerLink="motivosReferenciaCliente"><mat-icon mat-list-icon>folder</mat-icon><h3>Motivos de Referencia al Cliente</h3></a>
-        <a mat-list-item routerLink="mediosContacto"><mat-icon mat-list-icon>folder</mat-icon><h3>Medios de Contacto</h3></a>
-<!-- N -->
-        <a mat-list-item routerLink="nivelesContabilizacion"><mat-icon mat-list-icon>folder</mat-icon><h3>Niveles de Contabilizacion</h3></a>
-        <a mat-list-item routerLink="notarios"><mat-icon mat-list-icon>folder</mat-icon><h3>Notarios</h3></a>        
-<!-- O -->
-        <a mat-list-item routerLink="origenFondos"><mat-icon mat-list-icon>folder</mat-icon><h3>Origen de Fondos</h3></a>                                  
-<!-- P -->
-        <a mat-list-item routerLink="parametrosAdicionalesProductos"><mat-icon mat-list-icon>folder</mat-icon><h3>Parametros Adicionales por Producto</h3></a>        
-        <a mat-list-item routerLink="parametrizacionNumeroPrestamo"><mat-icon mat-list-icon>folder</mat-icon><h3>Parametrizacion Número de Prestamo</h3></a>
-        <a mat-list-item routerLink="porcentajeFinanciamiento"><mat-icon mat-list-icon>folder</mat-icon><h3>Porcentaje Fianaciero</h3></a>
-        <a mat-list-item routerLink="pasosCierre"><mat-icon mat-list-icon>folder</mat-icon><h3>Pasoso de Cierre</h3></a>
-        <a mat-list-item routerLink="productos"><mat-icon mat-list-icon>folder</mat-icon><h3>Productos</h3></a>        
-<!-- Q -->
-<!-- R -->
-        <a mat-list-item routerLink="rangoPlazosInteres"><mat-icon mat-list-icon>folder</mat-icon><h3>Rango de Plazos por Interes</h3></a>
-        <a mat-list-item routerLink="relacionTransaccionDeposito"><mat-icon mat-list-icon>folder</mat-icon><h3>Relacion Transacion Deposito</h3></a>
-<!-- S -->
-<!-- T -->
-        <a mat-list-item routerLink="tiposCanalesDistribucion"><mat-icon mat-list-icon>folder</mat-icon><h3>Tipos Canales de Distribucion</h3></a>
-        <a mat-list-item routerLink="tiposDeducciones"><mat-icon mat-list-icon>folder</mat-icon><h3>Tipos de Deduccion</h3></a>
-        <a mat-list-item routerLink="tiposPrestamos"><mat-icon mat-list-icon>folder</mat-icon><h3>Tipos de Prestamos</h3></a>
-        <a mat-list-item routerLink="tiposSubtiposGarantiasRealas"><mat-icon mat-list-icon>folder</mat-icon><h3>Tipos y Subtipos de Garantias Reales</h3></a>                
-        <a mat-list-item routerLink="tiposTransacciones"><mat-icon mat-list-icon>folder</mat-icon><h3>Tipos de Transacciones</h3></a>
-<!-- U -->
-        <a mat-list-item routerLink="ubicacionGarantia"><mat-icon mat-list-icon>folder</mat-icon><h3>Ubicacion de Garantia</h3></a>                        
-<!-- V -->
-<!-- W -->
-<!-- X -->
-<!-- Y -->
-<!-- Z -->
-    </mat-nav-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content>           
-      <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
-</div>
+        <mat-toolbar class="example-toolbar" style="background: #273746" color="primary">
+            <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+            SCEF
+          </mat-toolbar>     
+      <mat-sidenav-container class="example-sidenav-container"
+                             [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+        <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                     [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" [(opened)]="opened" (opened)="events.push('open!')"
+                     (closed)="events.push('close!')">   
+        <div class="example-form">
+            <mat-form-field style="width: 400px" appearance="fill">
+                <mat-label>BUSCADOR</mat-label>              
+                <input  matInput  (keyup)="applyFilter($event.target.value)">                                                                                     
+            </mat-form-field>            
+        </div>  
+      
+      <table mat-table [dataSource]="dataSource" style="margin-top: -80px; width: 400px">
+      
+              <!-- Name Column -->
+              <ng-container matColumnDef="descripcion">
+                      <th mat-header-cell *matHeaderCellDef style="display: none;margin: 0;padding: 0"> Descripcion </th>
+                      <td mat-cell *matCellDef="let element" id="desc"><mat-icon mat-list-icon>folder</mat-icon>
+                              <a routerLink={{element.enlace}}>{{element.descripcion}} </a></td>
+              </ng-container>
+      
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+              </tr>
+      </table>
+        </mat-sidenav>
+      
+        <mat-sidenav-content>           
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+      </div>

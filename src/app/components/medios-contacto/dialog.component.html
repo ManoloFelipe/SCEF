@@ -1,7 +1,12 @@
 <form>
+    <mat-card class="centro">
+        <mat-card-title>Altas</mat-card-title>
+      </mat-card>
+
   <h4>Codigo</h4>
   <mat-form-field >
-    <input matInput placeholder="Codigo">
+    <input matInput placeholder="Codigo" [(ngModel)]="data.codigo"
+    [ngModelOptions]="{standalone: true}">
   </mat-form-field>
     
     <br>
@@ -10,13 +15,14 @@
 
     <h4>Descripcion</h4>
     <mat-form-field >
-      <input matInput placeholder="Descripcion categoria">
+      <input matInput placeholder="Descripcion categoria" [(ngModel)]="data.descripcion"
+      [ngModelOptions]="{standalone: true}">
     </mat-form-field>
     <br>
     <br>
   </form>
     
-<button mat-button (click)="onNoClick()">No Thanks</button>
-<button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Guardar</button>
+<button mat-button [mat-dialog-close]="">No Thanks</button>
+<button type="submit" mat-button [mat-dialog-close]="data" cdkFocusInitial>Guardar</button>
 
 

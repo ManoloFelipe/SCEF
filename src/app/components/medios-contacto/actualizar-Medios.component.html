@@ -1,0 +1,20 @@
+<mat-toolbar color="primary" class="encabezado">Actualizar Lugar de Inversion</mat-toolbar>
+<br>
+<form class="example-form">
+    <div mat-dialog-content>  
+        <mat-form-field>
+            <input matInput placeholder="Codigo" [(ngModel)]="data.codigo"
+            [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <input matInput placeholder="Descripcion" [(ngModel)]="data.descripcion"
+            [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+        <br>
+      </div>
+  </form>
+  <div mat-dialog-actions>
+    <button mat-button  [mat-dialog-close]="">Cancelar</button>
+    <button type="submit" mat-button  [mat-dialog-close]="data" cdkFocusInitial>Editar</button>
+  </div>

@@ -3,10 +3,13 @@
 <form>
 <table style="margin: auto;" class="letra">
 <tr>
+        
 <td><h4>Codigo:  </h4></td>
 <td>
+
 <mat-form-field>
-    <input matInput placeholder="Input">
+    <input matInput placeholder="Introduce el Codigo" [(ngModel)]="data.codigo"
+        [ngModelOptions]="{standalone: true}">
     </mat-form-field>
 </td>
 </tr>
@@ -14,7 +17,8 @@
 <td><h4>Nombre:  </h4></td>
 <td>
 <mat-form-field>
-<input matInput placeholder="Input">
+    <input matInput placeholder="Introduce el nombre" [(ngModel)]="data.nombre"
+    [ngModelOptions]="{standalone: true}">
 </mat-form-field>
 </td>
 </tr>
@@ -22,24 +26,18 @@
 <td><h4>Colegiado No.:</h4></td>
 <td>
 <mat-form-field>
-    <input matInput placeholder="Input">
+    <input matInput placeholder="Introduce el Colegiado" [(ngModel)]="data.colegiado"
+          [ngModelOptions]="{standalone: true}">
     </mat-form-field>
 </td>
 </tr>
 <tr>
-<td><h4>Código:  </h4></td>
-<td>
-<mat-form-field>
-        <input matInput placeholder="Input">
-        </mat-form-field>
-</td>
-</tr>
-
 <tr>
 <td><h4>Dirección:  </h4></td>
 <td>
 <mat-form-field>
-    <input matInput placeholder="Input">
+    <input matInput placeholder="Introduce la Dirección" [(ngModel)]="data.direccion"
+          [ngModelOptions]="{standalone: true}">
     </mat-form-field>
 </td>
 </tr>       
@@ -47,7 +45,8 @@
 <td><h4>Identificación:  </h4></td>
 <td>
 <mat-form-field>
-        <input matInput placeholder="Input">
+    <input matInput placeholder="Introduce el identificacion" [(ngModel)]="data.identificacion"
+    [ngModelOptions]="{standalone: true}">
         </mat-form-field>
 </td>
 </tr>
@@ -55,16 +54,18 @@
 <td><h4>Telefono:  </h4></td>
 <td>
     <mat-form-field>
-            <input matInput placeholder="Input">
-            </mat-form-field>
+        <input matInput placeholder="Introduce el Telefono" [(ngModel)]="data.telefono"
+          [ngModelOptions]="{standalone: true}">
+    </mat-form-field>
 </td>
 </tr>
 <tr>
 <td><h4>Fax:  </h4></td>
 <td>
-        <mat-form-field>
-                <input matInput placeholder="Input">
-                </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Introduce el Fax" [(ngModel)]="data.fax"
+        [ngModelOptions]="{standalone: true}">
+</mat-form-field>
 </td>
 </tr>
 </table > 
@@ -72,5 +73,5 @@
      
          <!--<button mat-button (click)="onNoClick()">Cancelar</button>-->
          <button mat-button [mat-dialog-close]="">Cancelar</button>
-  <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Guardar</button>
+  <button type="submit" mat-button [mat-dialog-close]="data" cdkFocusInitial>Guardar</button>
 </form>

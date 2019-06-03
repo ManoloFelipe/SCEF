@@ -59,6 +59,9 @@ import { Estatuslegalescomponent } from './components/estatus-legales/estatus-le
 import { EnlaceContabilidadComponent } from './components/enlace-contabilidad/enlace-contabilidad.component';
 import { ContenidosContablesComponent } from './components/contenidos-contables/contenidos-contables.component';
 import { NivelesContabilizacionComponent } from './components/niveles-contabilizacion/niveles-contabilizacion.component';
+import { InstanciaComponent } from './components/instancia/instancia.component';
+import { PoderComponent } from './components/poder/poder.component';
+import { SupervisorComponent } from './components/supervisor/supervisor.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -141,11 +144,16 @@ const routes: Routes = [
     {path: 'Home', component: HomeComponent},  
     
   //CONTA
-  {path: 'enlaceContablidad', component: EnlaceContabilidadComponent},  
+  {path: 'enlaceContabilidad', component: EnlaceContabilidadComponent},  
   {path: 'nivelesContabilizacion', component: NivelesContabilizacionComponent},  
   {path: 'contenidoContable', component: ContenidosContablesComponent},
-    {path: '**', component: HomeComponent}
+  
+  //EXTRA
+  {path: 'poder', component: PoderComponent},  
+  {path: 'instancia', component: InstanciaComponent},  
+  {path: 'supervisor', component: SupervisorComponent},
 
+  {path: '**', component: HomeComponent}
 ];
 
 @NgModule({

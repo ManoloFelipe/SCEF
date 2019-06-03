@@ -10,34 +10,31 @@
 <mat-card class="centro"><mat-card-title>Lugares de Inversion</mat-card-title></mat-card>
 <br>
 <br>
-<form class="example-form">
-  <mat-form-field class="example-full-width">
-    <input matInput placeholder="Estatus">
+<div class="example-form">
+  <mat-form-field appearance="outline">
+    <mat-label>Buscar</mat-label>
+    <input matInput placeholder="Ingrese el codigo" (keyup)="applyFilter($event.target.value)">    
+    <mat-hint>Buscar por codigo</mat-hint>
   </mat-form-field>
+    <button mat-icon-button>
+      <mat-icon matSuffix>search</mat-icon>
+    </button>                 
+  </div>  
   <br>
-  <mat-form-field class="example-full-width">
-    <input matInput placeholder="Descripcion ">
-  </mat-form-field>
-</form>  
   <br>
-  <br>
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table (click)="imprimir()" [dataSource]="dataSource2" class="mat-elevation-z8">
 
   <!-- Checkbox Column -->
   <ng-container matColumnDef="select">
     <th mat-header-cell *matHeaderCellDef>
-      <mat-checkbox (change)="$event ? masterToggle() : null"
-                    [checked]="selection.hasValue() && isAllSelected()"
-                    [indeterminate]="selection.hasValue() && !isAllSelected()"
-                    [aria-label]="checkboxLabel()">
+      <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+        [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
       </mat-checkbox>
     </th>
     <td mat-cell *matCellDef="let row">
-      <mat-checkbox (click)="$event.stopPropagation()"
-                    (change)="$event ? selection.toggle(row) : null"
-                    [checked]="selection.isSelected(row)"
-                    [aria-label]="checkboxLabel(row)">
-      </mat-checkbox>
+      <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row): null; imprimir()"
+      [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)" >
+    </mat-checkbox>
     </td>
   </ng-container>
 
@@ -53,9 +50,13 @@
     <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
   </ng-container>
 
+  <ng-container matColumnDef="equivalencia">
+    <th mat-header-cell *matHeaderCellDef> Equivalencia </th>
+    <td mat-cell *matCellDef="let element"> {{element.equivalencia}} </td>
+  </ng-container>
+  
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-      (click)="selection.toggle(row)">
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
   </tr>
 </table>
   <br>

@@ -6,11 +6,13 @@
   
         <p>
           <mat-form-field class="example-full-width">
-            <input matInput placeholder="Introduce el Codigo">
+            <input matInput placeholder="Introduce el Codigo" [(ngModel)]="data.codigo"
+            [ngModelOptions]="{standalone:true}">
           </mat-form-field>
         <br>
           <mat-form-field class="example-full-width">
-            <textarea matInput placeholder="Descripcion"></textarea>
+            <textarea matInput placeholder="Descripcion" [(ngModel)]="data.descripcion"
+            [ngModelOptions]="{standalone:true}"></textarea>
           </mat-form-field>
           </p>
  
@@ -18,4 +20,4 @@
 <br>
 
   <button mat-button [mat-dialog-close]="">Cancelar</button>
-  <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Guardar</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Guardar</button>

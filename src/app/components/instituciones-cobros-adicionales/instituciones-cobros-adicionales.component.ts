@@ -3,71 +3,223 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { InstitucionCobroAdicional } from 'src/app/models/institucion-cobro-adicional.model';
+import { InstitucionCobroAdicionalService } from 'src/app/services/institucion-cobro-adicional.service';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-}
-export interface DialogData {
-  animal: string;
-  name: string;
-}
-export interface DialogData2 {
-  animal: string;
-  name: string;
-}
-
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'INGRESOS INSTITUCIONES'},
-];
 
 @Component({
   selector: 'app-instituciones-cobros-adicionales',
   templateUrl: './instituciones-cobros-adicionales.component.html',
-  styleUrls: ['./instituciones-cobros-adicionales.component.css']
+  styleUrls: ['./instituciones-cobros-adicionales.component.css'],
+  providers: [InstitucionCobroAdicionalService]
 })
 export class InstitucionesCobrosAdicionalesComponent implements OnInit {
-  animal: string;
-  name: string;
+  instituciones: InstitucionCobroAdicional[];
+  public status: string;
+  public numeroPagina: number = 0;
+  public numeroItems: number = 5;
+  public primeraPagina: boolean;
+  public ultimaPagina: boolean;
+  public listarNumeroPagina: number = 0;
+  public cantidadActual: number;
+  public institucionModel: InstitucionCobroAdicional;
+  public institucionEditable: InstitucionCobroAdicional;
+  public institucionSeleccionada: number[];
 
-  constructor(public dialog: MatDialog) {}
+  public dataSource2;
+
+  constructor(public dialog: MatDialog, private _institucionService: InstitucionCobroAdicionalService) {
+    this.limpiarVariables();
+  }
+
+  limpiarVariables(){
+    this.institucionModel = new InstitucionCobroAdicional(0,0,'','','1',true),
+    this.institucionEditable = new InstitucionCobroAdicional(0,0,'','','1',true)
+  }
+  applyFilter(filterValue: string) {
+    this.dataSource2.filter = filterValue.trim().toLowerCase(); 
+  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogCobrosAgregar, {
       width: '500px',
-      data: {name: this.name, animal: this.animal}
+      data: {codigo: this.institucionModel.codigo, descripcion: this.institucionModel.descripcion}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.animal = result;
+      this.institucionModel.codigo = result.codigo;
+      this.institucionModel.descripcion = result.descripcion;
+      console.table(this.institucionModel);
+        this.agregar();
     });
   }
 
-  openDialog2(): void {
-    const dialogRef = this.dialog.open(DialogCobrosAgregarCheck, {
+  openDialogEdit(): void {
+    const dialogRef = this.dialog.open(DialogCobrosEditar, {
       width: '500px',
-      data: {name: this.name, animal: this.animal}
+      data: {codigo: this.institucionEditable.codigo, descripcion: this.institucionEditable.descripcion}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.animal = result;
+      if (result != undefined) {
+        this.institucionEditable.codigo = result.codigo;
+        this.institucionEditable.descripcion = result.descripcion;
+        console.log(result);
+        console.table(this.institucionEditable);
+        this.editar();
+      }
+    });
+  }
+  
+  openDialogEliminar(): void {
+    const dialogRef = this.dialog.open(DialogCobrosEliminar, {
+      width: '500px',
+      data: {codigo: this.institucionEditable.codigo, descripcion: this.institucionEditable.descripcion}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result != undefined) {
+        this.institucionEditable.codigo = result.codigo;
+        this.institucionEditable.descripcion = result.descripcion;
+        console.log(result);
+        console.table(this.institucionEditable);
+        this.eliminar(this.institucionSeleccionada[0]);
+      }
     });
   }
 
+  ngOnInit() {
+    this.listarInstitucionesCobroParaTabla()
+  }
 
-  
-  displayedColumns: string[] = ['select', 'position', 'name'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-  selection = new SelectionModel<PeriodicElement>(true, []);
+  listarInstitucionesCobroParaTabla(){
+    this._institucionService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+      response =>{
+        if (response.content) {
+          this.instituciones = response.content;
+          this.dataSource2 = new MatTableDataSource<InstitucionCobroAdicional>(this.instituciones);
+          console.log(this.instituciones);
+          this.primeraPagina = response.first;
+          this.ultimaPagina = response.last;
+          this.listarNumeroPagina = response.numberOfElements;
+          this.status = 'ok';
+        }
+      }, error => {
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'error';
+        }
+      }
+    );
+  }
+
+  setInstitucionesCobro(id){
+    if(this.institucionSeleccionada == undefined) return;
+    this._institucionService.listarInstitucionCobro(id).subscribe(
+      response => {
+        if (response.code == 0) {
+          this.institucionEditable = response;
+          console.log(this.institucionEditable)
+          this.status = 'ok';
+        } else {
+          this.status = 'error';
+        }
+      }, error => {
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'error';
+        }
+      }
+    );
+  }
+
+  agregar(){
+    this._institucionService.crearInstitucionCobro(this.institucionModel).subscribe(
+      response => {
+        console.log(response)
+        this.listarInstitucionesCobroParaTabla();
+        if (response.code == 0) {
+          this.status = 'ok';
+        } else {
+          alert(response.description);
+        }
+      }, error => {
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          alert(error.description);
+          this.status = 'error';
+        }
+      }
+    );
+  }
+
+  editar(){
+    this._institucionService.actualizarInstitucionCobro(this.institucionEditable).subscribe(
+      response => {
+        console.log(response);
+        this.listarInstitucionesCobroParaTabla()
+        if (response.code == 0) {
+          this.status = 'ok';
+        } else {
+          alert(response.description);
+        }
+      }, error => {
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          alert(error.description);
+          this.status = 'error';
+        }
+      }
+    );
+  }
+
+  eliminar(id){
+    if(this.institucionSeleccionada == undefined) return;
+    this._institucionService.eliminarInstitucionCobro(id).subscribe(
+      response => {
+        this.listarInstitucionesCobroParaTabla()
+        if (response.code == 0) {
+          this.institucionEditable = response;
+          console.log(this.institucionEditable)
+          this.status = 'ok';
+        } else {
+          this.status = 'error';
+        }
+      }, error => {
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'error';
+        }
+      }
+    );
+  }
+ 
+  displayedColumns: string[] = ['select', 'codigo', 'descripcion'];
+  dataSource = new MatTableDataSource<InstitucionCobroAdicional>(this.instituciones);
+  selection = new SelectionModel<InstitucionCobroAdicional>(false, []);
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
+  }
+
+  imprimir() {
+    this.institucionSeleccionada = this.selection.selected.map(row => row.codigo);
+    console.log(this.institucionSeleccionada[0]);
+    if (this.institucionSeleccionada[0]) {
+      this.setInstitucionesCobro(this.institucionSeleccionada[0]);
+    }
+    //    console.table(this.selection.selected)
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
@@ -78,15 +230,12 @@ export class InstitucionesCobrosAdicionalesComponent implements OnInit {
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: PeriodicElement): string {
+  checkboxLabel(row?: InstitucionCobroAdicional): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.codigo + 1}`;
   }
-  ngOnInit() {
-  }
-
 }
 @Component({
   selector: 'dialog-overview-example-dialog',
@@ -97,23 +246,41 @@ export class DialogCobrosAgregar {
 
   constructor(
     public dialogRef: MatDialogRef<DialogCobrosAgregar>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: InstitucionCobroAdicional) {}
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
 }
+
 @Component({
   selector: 'dialog-overview-example-dialog2',
-  templateUrl: 'cobros-agregar-check.html',
+  templateUrl: 'cobros-editar.html',
   styleUrls: ['./instituciones-cobros-adicionales.component.css']
 })
-export class DialogCobrosAgregarCheck {
+export class DialogCobrosEditar {
 
   constructor(
-    public dialogRef: MatDialogRef<DialogCobrosAgregarCheck>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData2) {}
+    public dialogRef: MatDialogRef<DialogCobrosEditar>,
+    @Inject(MAT_DIALOG_DATA) public data: InstitucionCobroAdicional) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+
+@Component({
+  selector: 'dialog-overview-example-dialog2',
+  templateUrl: 'eliminar-cobro.html',
+  styleUrls: ['./instituciones-cobros-adicionales.component.css']
+})
+export class DialogCobrosEliminar {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogCobrosEliminar>,
+    @Inject(MAT_DIALOG_DATA) public data: InstitucionCobroAdicional) {}
 
   onNoClick(): void {
     this.dialogRef.close();

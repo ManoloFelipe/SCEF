@@ -1,17 +1,23 @@
-<mat-toolbar color="primary" class="encabezado">Agregar Categoria SIB</mat-toolbar>
-<form class="example-form">
-  <div mat-dialog-content>
-    <mat-form-field>
-        <input class="inputAgregar" matInput placeholder="Codigo categoria">
-    </mat-form-field>
-    <br>
-    <mat-form-field>
-        <input class="inputAgregar" matInput placeholder="Descripcion categoria">
-    </mat-form-field>
-  </div>
-</form>
-<hr>
-  <div mat-dialog-actions>
-    <button mat-button color="primary" (click)="onNoClick()">Cancelar</button>
-    <button mat-button color="primary" [mat-dialog-close]="data.estatus" cdkFocusInitial>Editar</button>
-  </div>
+
+  <mat-card class="centro"><mat-card-title>Editar Categoria</mat-card-title></mat-card>
+  <br>
+  <br>
+  <table class="centro">
+    
+          <p>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Introduce el Codigo" [(ngModel)]="data.codigo"
+             [ngModelOptions]="{standalone:true}" >
+            </mat-form-field>
+          <br>
+            <mat-form-field class="example-full-width">
+              <textarea matInput placeholder="Descripcion" [(ngModel)]="data.descripcion"
+              [ngModelOptions]="{standalone:true}"></textarea>
+            </mat-form-field>
+            </p>
+   
+  </table > 
+  <br>
+  
+    <button mat-button [mat-dialog-close]="">Cancelar</button>
+    <button type="submit" mat-button [mat-dialog-close]="data" cdkFocusInitial>Editar</button>

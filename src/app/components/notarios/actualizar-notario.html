@@ -1,0 +1,45 @@
+<mat-card class="dialog">
+    <mat-card-title>Cambios </mat-card-title>
+  </mat-card>
+  <br>
+  <br>
+  <form>
+    <table class="letra" >
+  
+      <p>
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Ingrese el Codigo" [(ngModel)]="data.codigo"
+            [ngModelOptions]="{standalone: true}" readonly>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input  matInput placeholder="Ingrese el nombre" [(ngModel)]="data.nombre"
+            [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <input  matInputplaceholder="Ingrese la direccion" [(ngModel)]="data.direccion"
+            [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+        <input  matInput placeholder="Ingrese el colegiado" [(ngModel)]="data.colegiado"
+            [ngModelOptions]="{standalone: true}">
+        </mat-form-field><mat-form-field class="example-full-width">
+        <input  matInput placeholder="Ingrese la identificacion" [(ngModel)]="data.identificacion"
+            [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+        <input  matInput placeholder="Ingrese numero de telefono" [(ngModel)]="data.telefono"
+            [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <input  matInput placeholder="Ingrese el fax" [(ngModel)]="data.fax"
+                [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+      </p>
+  
+    </table>
+    <br>
+  
+    <button mat-button [mat-dialog-close]="">Cancelar</button>
+    <button type="submit" mat-button [mat-dialog-close]="data" cdkFocusInitial>Editar</button>
+  </form>

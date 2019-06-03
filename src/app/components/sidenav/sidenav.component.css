@@ -29,3 +29,12 @@
        `<body>` to be our scrolling element for mobile layouts. */
     flex: 1 0 auto;
   }
+
+  a:link, a:visited {
+    color: gray;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: black;
+    font-weight: normal;
+    display: inline-block;
+  }

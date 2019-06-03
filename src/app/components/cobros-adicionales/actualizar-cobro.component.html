@@ -1,0 +1,30 @@
+<mat-card class="dialog">
+    <mat-card-title>Cambios </mat-card-title>
+  </mat-card>
+  <br>
+  <br>
+  <form>
+    <table class="letra" >
+  
+      <p>
+        <mat-form-field class="example-full-width">
+            <input matInput placeholder="Ingrese el Codigo" [(ngModel)]="data.codigo"
+              [ngModelOptions]="{standalone: true}" readonly>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input  matInput placeholder="Ingrese la descripcion" [(ngModel)]="data.descripcion"
+              [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+          
+          <mat-form-field class="example-full-width">
+            <input  matInput placeholder="Ingrese la descripcion corta" [(ngModel)]="data.descripcionCorta"
+              [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+      </p>
+  
+    </table>
+    <br>
+  
+    <button mat-button [mat-dialog-close]="">Cancelar</button>
+    <button type="submit" mat-button [mat-dialog-close]="data" cdkFocusInitial>Editar</button>
+  </form>

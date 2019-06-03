@@ -22,7 +22,23 @@ font-size: 20px;
 #inputs{
     margin-left: 300px;
 }
+.buttons{
+  margin: 0 auto; 
+  width: 300px;
+  padding: 25px 0;
+  text-align: center
+}
+.example-form {
+  min-width: 100px;
+  max-width: 300px;
+  width: 100%;
+  position: relative;
+  left: 40%;
+}
 
+mat-card mat-card-title{
+  text-align: center;
+}
 #i2{
     margin-left: 700px;
     margin-top: 1000

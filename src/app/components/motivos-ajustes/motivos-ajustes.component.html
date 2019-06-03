@@ -23,25 +23,25 @@ matRipple
       </td>
     </tr>
   </table > 
+
   <mat-spinner class="capa1" *ngIf="mostrar"></mat-spinner>
-<table width="80%" mat-table [dataSource]="dataSource" class="centroTabla">
+
+
+<table width="80%" (click)="imprimir()" mat-table [dataSource]="dataSource2" class="centroTabla">
 
   <!-- Checkbox Column -->
   <ng-container matColumnDef="select">
     <th mat-header-cell *matHeaderCellDef>
-      <mat-checkbox (change)="$event ? masterToggle() : null"
-                    [checked]="selection.hasValue() && isAllSelected()"
-                    [indeterminate]="selection.hasValue() && !isAllSelected()"
-                    [aria-label]="checkboxLabel()">
+      <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+        [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
       </mat-checkbox>
     </th>
+
     <td mat-cell *matCellDef="let row">
-      <mat-checkbox (click)="$event.stopPropagation()"
-                    (change)="$event ? selection.toggle(row) : null"
-                    [checked]="selection.isSelected(row)"
-                    [aria-label]="checkboxLabel(row)">
+      <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row): null; imprimir()"
+        [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)" >
       </mat-checkbox>
-    </td>
+    </td> 
   </ng-container>
 
   <!-- Position Column -->

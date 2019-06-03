@@ -1,20 +1,20 @@
 
 <!-- <mat-toolbar color="primary" class="encabezado">My App</mat-toolbar> -->
 
-<form class="example-form">
-  <mat-form-field class="example-full-width">
-    <input matInput placeholder="Codigo categoria">
+<div class="example-form">
+  <mat-form-field appearance="outline">
+    <mat-label>Buscar</mat-label>
+    <input matInput placeholder="¿Que desea buscar?" (keyup)="applyFilter($event.target.value)">    
+    <mat-hint>Buscar Estatus</mat-hint>
   </mat-form-field>
-  <br>
-  <br>
-  <mat-form-field class="example-full-width">
-    <input matInput placeholder="Descripcion categoria">
-  </mat-form-field>
-</form>  
+    <button mat-icon-button>
+      <mat-icon matSuffix>search</mat-icon>
+    </button>                 
+  </div>  
   <br>
   <br>
   
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table (click)="imprimir()" [dataSource]="dataSource2" class="mat-elevation-z8">
 
   <!-- Checkbox Column -->
   <ng-container matColumnDef="select">
@@ -27,7 +27,7 @@
     </th>
     <td mat-cell *matCellDef="let row">
       <mat-checkbox (click)="$event.stopPropagation()"
-                    (change)="$event ? selection.toggle(row) : null"
+                    (change)="$event ? selection.toggle(row) : null; imprimir()"
                     [checked]="selection.isSelected(row)"
                     [aria-label]="checkboxLabel(row)">
       </mat-checkbox>

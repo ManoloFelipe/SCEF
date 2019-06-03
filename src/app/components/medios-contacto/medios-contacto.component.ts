@@ -2,97 +2,219 @@ import { Component, OnInit, Inject } from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MedioContacto} from 'src/app/models/medioContacto.model'
+import {MediosContactoService} from 'src/app/services/medios-contacto.service'  
 
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  
-];
 
 @Component({
   selector: 'app-medios-contacto',
   templateUrl: './medios-contacto.component.html',
-  styleUrls: ['./medios-contacto.component.css']
+  styleUrls: ['./medios-contacto.component.css'],
+  providers: [MediosContactoService]
 })
 export class MediosContactoComponent implements OnInit {
 
+  public medios: MedioContacto[];
+  public status: string;
+  public numeroPagina: number = 0;
+  public numeroItems: number = 5;
+  public primeraPagina: boolean;
+  public ultimaPagina: boolean;
+  public cantidadActual: number;
+  public medioModel: MedioContacto;
+  public medioEditable: MedioContacto;
+  public medioSeleccionado: number[];
 
-  animal: string;
-  names: string;
-  mostrar: Boolean;
-  centered = false;
-  disabled = false;
-  unbounded = false;
-
-  radius: number;
-  color: string;
-  
-
-  timeLeft: number;
-  interval;
-
-  constructor(public dialog: MatDialog) {}
+  public dataSource2;
 
   
-startTimer() {
-  this.timeLeft = 2;
-    this.interval = setInterval(() => {
-      if(this.timeLeft >0 && this.timeLeft < 10){
-        this.mostrar = true;
-        this.timeLeft--;
-      }
-      else if( this.timeLeft > 0) {
-        this.timeLeft--;
-        
-      } else if (this.timeLeft == 0) {
-        this.mostrar = false;
-        this.openDialog();
-        this.timeLeft = 10000;
-      }
-    },1000)
+
+  constructor(public dialog: MatDialog, private _medioService:MediosContactoService) {
+    this.limpiarVariables();
   }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
 
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogContacto, {
       width: '400px',
-      height:'700px',      
-      data: {names: this.names, animal: this.animal}
+      data: {codigo: this.medioModel.codigo, descripcion: this.medioModel.descripcion}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.animal = result;
+      if(result !=undefined){
+        this.medioModel.codigo = result.codigo;
+        this.medioModel.descripcion = result.descripcion;
+        console.log(result);
+        console.table(this.medioModel);
+        this.agregar();
+      }
+    });
+  }
+
+  openDialogEdit(): void {
+    const dialogRef = this.dialog.open(DialogActualizarMedio, {
+      width: '500px',
+      data: { codigo: this.medioEditable.codigo, descripcion: this.medioEditable.descripcion }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result != undefined) {
+         this.medioEditable.codigo = result.codigo;
+         this.medioEditable.descripcion = result.descripcion;
+        console.log(result);
+         console.table(this.medioEditable);
+         this.editar();
+      }
     });
   }
 
   openDialogEliminar(): void {
     const dialogRef = this.dialog.open(DialogEliminarContacto, {
       width: '400px',
-      height:'700px',      
-      data: {names: this.names, animal: this.animal}
+      data: {codigo: this.medioEditable.codigo, descripcion: this.medioEditable.descripcion}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.animal = result;
+      if(result !=undefined){
+        this.medioEditable.codigo = result.codigo;
+         this.medioEditable.descripcion = result.descripcion;
+         console.log(result);
+         console.table(this.medioEditable);
+         this.eliminar(this.medioSeleccionado[0]);
+      }
     });
   }
 
 
   ngOnInit() {
+    this.listarMedioContactoParaTabla();
   }
 
-  displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-  selection = new SelectionModel<PeriodicElement>(true, []);
+  limpiarVariables(){
+    this.medioEditable = new MedioContacto (0,0,'','','1',true);
+    this.medioModel = new MedioContacto (0,0,'','','1',true)
+  }
+
+  listarMedioContactoParaTabla(){
+    this._medioService.listarPagina(this.numeroPagina,this.numeroItems).subscribe(
+      response=>{
+        if(response.content){
+          this.medios = response.content;
+          this.dataSource2 = new MatTableDataSource<MedioContacto>(this.medios);
+          console.log(this.medios);
+          this.primeraPagina = response.first;
+          this.ultimaPagina = response.last;
+          this.cantidadActual = response.numberOfElements;
+          this.status='ok'
+        }
+      },
+      error=>{
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'error';
+        }
+      }
+    )
+  }
+
+  setMediosContacto(id){
+    if(this.medioSeleccionado==undefined)return;
+    this._medioService.listarMedioContacto(id).subscribe(
+      response=>{
+        if(response.code ==0){
+          this.medioEditable= response;
+          console.log(this.medioEditable);
+          this.status= 'error';
+        }
+      },
+      error=>{
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'error';
+        }
+      }
+    )
+  }
+
+  agregar(){
+    this._medioService.crearMedioContacto(this.medioModel).subscribe(
+      response=>{
+        console.log(response);
+        this.listarMedioContactoParaTabla();
+        if(response.code ==0){
+          this.status = 'ok';
+        }else{
+          alert(response.description);
+        }
+      },
+      error=>{
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          alert(error.description);
+          this.status = 'error';
+        }
+      }
+    )
+  }
+
+  editar(){
+    this._medioService.actualizarMedioContacto(this.medioEditable).subscribe(
+      response=>{
+        console.log(response);
+        this.listarMedioContactoParaTabla();
+        if(response.code ==0){
+          this.status='ok';
+        }else{
+          alert(response.description)
+        }
+      },
+      error=>{
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          alert(error.description);
+          this.status = 'error';
+        }
+      }
+    )
+  }
+
+  eliminar(id){
+    if(this.medioSeleccionado==undefined)return;
+    this._medioService.eliminarMedioContacto(id).subscribe(
+      response=>{
+        if(response.code==0){
+          this.medioEditable= response;
+          console.log(this.medioEditable);
+          this.listarMedioContactoParaTabla();
+          this.status='ok';
+        }else{
+          this.status ='error';
+        }
+      },
+      error=>{
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'error';
+        }
+      }
+    )
+  }
+
+  displayedColumns: string[] = ['select', 'codigo', 'descripcion'];
+  dataSource = new MatTableDataSource<MedioContacto>(this.medios);
+  selection = new SelectionModel<MedioContacto>(false, []);
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -101,40 +223,59 @@ startTimer() {
     return numSelected === numRows; 
   }
 
+  imprimir(){
+    this.medioSeleccionado = this.selection.selected.map(row=> row.codigo);
+    console.log(this.medioSeleccionado[0]);
+    if(this.medioSeleccionado[0]){
+      this.setMediosContacto(this.medioSeleccionado[0]);
+    }
+    
+  
+  }
+
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
         this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
+        this.dataSource2.data.forEach(row => this.selection.select(row));
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: PeriodicElement): string {
+  checkboxLabel(row?: MedioContacto): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.codigo + 1}`;
   }
 
 }
 
 
-export interface DialogData {
-  animal: string;
-  names: string;
-}
+
 
 @Component({
   selector: 'Dialog-Contacto',
   templateUrl: 'dialog.component.html',
-  styleUrls: ['./medios-contacto.component.css']
+  styleUrls: ['./medios-contacto.component.css'],
+  providers : [MediosContactoService]
 })
 export class DialogContacto {
-  
+  public medios:MedioContacto[];
+  public status: string;
+  public numeroPagina: number = 0;
+  public numeroItems: number = 5;
+  public primeraPagina: boolean;
+  public ultimaPagina: boolean;
+  public cantidadActual: number;
+  public medioModel: MedioContacto;
+  public medioEditable: MedioContacto;
 
   constructor(
     public dialogRef: MatDialogRef<DialogContacto>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: MedioContacto,
+    private _medioService: MediosContactoService) {
+      this.medioModel = new MedioContacto(0,0,'','','1',true);
+    }
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -146,13 +287,31 @@ export class DialogContacto {
   selector: 'Dialog-Contacto',
   templateUrl: 'Dialog-eliminar-medios-coontacto.component.html',
   styleUrls: ['./medios-contacto.component.css']
+
 })
 export class DialogEliminarContacto {
   
 
   constructor(
     public dialogRef: MatDialogRef<DialogEliminarContacto>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: MedioContacto) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+
+@Component({
+  selector: 'Dialog-Contacto',
+  templateUrl: 'actualizar-Medios.component.html',
+  styleUrls: ['./medios-contacto.component.css']
+})
+export class DialogActualizarMedio {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogActualizarMedio>,
+    @Inject(MAT_DIALOG_DATA) public data: MedioContacto) { }
 
   onNoClick(): void {
     this.dialogRef.close();

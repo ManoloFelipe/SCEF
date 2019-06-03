@@ -6,7 +6,8 @@
 <td><h4>Codigo:  </h4></td>
 <td>
 <mat-form-field>
-    <input matInput placeholder="Input">
+    <input matInput placeholder="Introduce el Codigo" [(ngModel)]="data.codigo"
+        [ngModelOptions]="{standalone: true}">
     </mat-form-field>
 </td>
 </tr>
@@ -14,7 +15,8 @@
 <td><h4>Descripcion:  </h4></td>
 <td>
 <mat-form-field>
-<input matInput placeholder="Input">
+    <input matInput placeholder="Introduce el Descripcion" [(ngModel)]="data.descripcion"
+    [ngModelOptions]="{standalone: true}">
 </mat-form-field>
 </td>
 </tr>
@@ -22,19 +24,25 @@
 <td>
     <h4>Afecta Saldo Capita:</h4></td>
 <td>
-        <mat-checkbox>Si</mat-checkbox>
+        <mat-checkbox value="S" [(ngModel)]="checked" [(ngModel)]="data.afectaSaldoCapital"
+        [ngModelOptions]="{standalone: true}">Si</mat-checkbox>
+        
 </td>
 </tr>
 <tr>
 <td><h4>Afecto Salto Interés:  </h4></td>
 <td>
-    <mat-checkbox>Si</mat-checkbox>
+    <mat-checkbox value="S" [(ngModel)]="checked2" [(ngModel)]="data.afectaSaldoInteres"
+        [ngModelOptions]="{standalone: true}">Si</mat-checkbox>
+        
 </td>
 </tr>
 <tr>
 <td><h4>Afecto Saldo Mora:  </h4></td>
 <td>
-    <mat-checkbox>Si</mat-checkbox>
+    <mat-checkbox value="S" [(ngModel)]="checked3" [(ngModel)]="data.afectaSaldoMora"
+        [ngModelOptions]="{standalone: true}">Si</mat-checkbox>
+        
 </td>
 </tr>       
 
@@ -43,5 +51,5 @@
      
          <!--<button mat-button (click)="onNoClick()">Cancelar</button>-->
          <button mat-button [mat-dialog-close]="">Cancelar</button>
-  <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Guardar</button>
+  <button type="submit" mat-button [mat-dialog-close]="data" cdkFocusInitial>Guardar</button>
 </form>

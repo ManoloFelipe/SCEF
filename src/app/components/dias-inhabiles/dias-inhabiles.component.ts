@@ -1,31 +1,79 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {SelectionModel} from '@angular/cdk/collections';
-import {MatTableDataSource} from '@angular/material';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-
-export interface PeriodicElement {
-  descripcion: string;
-  codigo: number;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {codigo: 1, descripcion: 'Hydrogen'},
-  {codigo: 2, descripcion: 'Helium'},
-  {codigo: 3, descripcion: 'Lithium'},
-  {codigo: 4, descripcion: 'Beryllium'},
-  {codigo: 5, descripcion: 'Boron'},
-];
-
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { DiaInhabil } from 'src/app/models/dia-inhabil.model';
+import { DiaInhabilService } from 'src/app/services/dia-inhabil.service';
 
 @Component({
   selector: 'app-dias-inhabiles',
   templateUrl: './dias-inhabiles.component.html',
-  styleUrls: ['./dias-inhabiles.component.css']
+  styleUrls: ['./dias-inhabiles.component.css'],
+  providers: [DiaInhabilService]
 })
 export class DiasInhabilesComponent implements OnInit {
+  
+  checked = false;
+  checked2 = false;
+  checked3 = false;
+  public diasInhabiles: DiaInhabil[];
+  public diaInhabilSeleccionado: number[];
+  public status: string;
+  public numeroPagina: number = 0;
+  public numeroItems: number = 7;
+  public primeraPagina: boolean;
+  public ultimaPagina: boolean;
+  public listarNumeroPagina: number = 0;
+  public cantidadActual: number;
+  public diaInhabilModel: DiaInhabil;
+  public diaInhabilEditable: DiaInhabil;
+  mostrar: Boolean;
+  centered = false;
+  disabled = false;
+  unbounded = false;
+
+  radius: number;
+  color: string;
+  public dataSource2;
+
   timeLeft: number;
   interval;
-  mostrar: boolean;
+
+  constructor(public dialog: MatDialog, private _diaInhabilService: DiaInhabilService) {
+    this.limpiarVariables();
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource2.filter = filterValue.trim().toLowerCase();
+  }
+
+  limpiarVariables() {
+    var start;
+    this.diaInhabilEditable = new DiaInhabil(0,'','','1',true,start = new Date(Date.now()),'');
+    this.diaInhabilModel = new DiaInhabil(0,'','','1',true,start = new Date(Date.now()),'');
+  }
+
+
+  setNotario(id) {
+    if(this.diaInhabilSeleccionado == undefined) return;
+    this._diaInhabilService.listarDiaInhabil(id).subscribe(
+      response => {
+        if (response.code == 0) {
+          this.diaInhabilEditable = response;
+          console.log(this.diaInhabilEditable)
+          this.status = 'ok';
+        } else {
+          this.status = 'error';
+        }
+      }, error => {
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'error';
+        }
+      }
+    );
+  }
 
   startTimer() {
     this.timeLeft = 2;
@@ -45,31 +93,192 @@ export class DiasInhabilesComponent implements OnInit {
       },1000)
     }
 
-  animal: string;
-  names: string;
+    openDialogDelete(): void {
+      const dialogRef = this.dialog.open(DialogEliminarDiaInhabil, {
+        width: '500px',
+        data: { descripcion: this.diaInhabilEditable.descripcion, 
+          fechaFeriado: this.diaInhabilEditable.fechaFeriado,
+          tipoFeriado: this.diaInhabilEditable.tipoFeriado,
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+        if (result != undefined) {
+          this.diaInhabilEditable.descripcion  = result.descripcion;
+          this.diaInhabilEditable.fechaFeriado = result.fechaFeriado;
+          this.diaInhabilEditable.tipoFeriado = result.tipoFeriado;
+          console.log(result);
+          console.table(this.diaInhabilEditable);
+          this.eliminar(this.diaInhabilSeleccionado[0]);
+        }
+      });
+    }
 
-  constructor(public dialog: MatDialog) {}
+    openDialog(): void {
+      const dialogRef = this.dialog.open(DialogDiaInhabil, {
+        width: '60%',
+        data: { descripcion: this.diaInhabilEditable.descripcion, 
+          fechaFeriado: this.diaInhabilEditable.fechaFeriado,
+          tipoFeriado: this.diaInhabilEditable.tipoFeriado,
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+        if (result != undefined) {
+          console.log("k:"+result.tipoFeriado)
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DialogDiaInhabil, {
-      width: '60%',
-      height: '80%', 
-      data: {names: this.names, animal: this.animal}
-    });
+        if (result.tipoFeriado == true) {
+          // this.CheckAfectaSaldoCapital = 'S'
+          result.tipoFeriado = 'V'
+        }
+        if (result.tipoFeriado == false) {
+          // this.CheckAfectaSaldoInteres = 'S'
+          result.tipoFeriado = 'F'
+        }
+        console.log(result.fechaFeriado)
+          this.diaInhabilModel.descripcion  = result.descripcion;
+          this.diaInhabilModel.fechaFeriado = result.fechaFeriado;
+          this.diaInhabilModel.tipoFeriado = result.tipoFeriado;
+          console.log(result);
+          console.table(this.diaInhabilModel);
+          this.agregar();
+        }
+      });
+    }
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.animal = result;
-    });
-  }
+    openDialogEdit(): void {
+      const dialogRef = this.dialog.open(DialogActualizarDiaInhabil, {
+        width: '500px',
+        data: { descripcion: this.diaInhabilEditable.descripcion, 
+          fechaFeriado: this.diaInhabilEditable.fechaFeriado,
+          tipoFeriado: this.diaInhabilEditable.tipoFeriado,
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+        if (result != undefined) {
+          this.diaInhabilEditable.descripcion  = result.descripcion;
+          this.diaInhabilEditable.fechaFeriado = result.fechaFeriado;
+          this.diaInhabilEditable.tipoFeriado = result.tipoFeriado;
+          console.log(result);
+          console.table(this.diaInhabilEditable);
+          this.editar();
+        }
+      });
+    }
 
+    editar() {
+      this._diaInhabilService.actualizarDiaInhabil(this.diaInhabilEditable).subscribe(
+        response => {
+          console.log(response);
+          this.listarNotariosParaDiaInhabil();
+          if (response.code == 0) {
+            this.status = 'ok';
+          } else {
+            alert(response.description);
+          }
+        }, error => {
+          let errorMessage = <any>error;
+          console.log(errorMessage);
+          if (errorMessage != null) {
+            alert(error.description);
+            this.status = 'error';
+          }
+        }
+      );
+    }
+
+    agregar() {
+      this._diaInhabilService.crearDiaInhabil(this.diaInhabilModel).subscribe(
+        response => {
+          console.log(response)
+          this.listarNotariosParaDiaInhabil();
+          this.limpiarVariables();
+          if (response.code == 0) {
+            this.status = 'ok';
+          } else {
+            alert(response.description);
+          }
+        }, error => {
+          let errorMessage = <any>error;
+          console.log(errorMessage);
+          if (errorMessage != null) {
+            alert(error.description);
+            this.status = 'error';
+          }
+        }
+      );
+    }
+
+    eliminar(id){
+      if(this.diaInhabilSeleccionado == undefined) return;
+      this._diaInhabilService.eliminarDiaInhabil(id).subscribe(
+        response => {
+          if (response.code == 0) {
+            this.listarNotariosParaDiaInhabil();
+            this.diaInhabilEditable = response;
+            console.log(this.diaInhabilEditable)
+            this.status = 'ok';
+          } else {
+            this.status = 'error';
+          }
+        }, error => {
+          let errorMessage = <any>error;
+          console.log(errorMessage);
+          if (errorMessage != null) {
+            this.status = 'error';
+          }
+        }
+      );
+    
+    }
 
   ngOnInit() {
+    this.listarNotariosParaDiaInhabil();
+  }
+
+  siguientePagina(){
+    if(!this.ultimaPagina){
+      ++this.listarNumeroPagina;
+      this.listarNotariosParaDiaInhabil()
+    }
+  }
+
+  anteriorPagina(){
+    if(!this.primeraPagina){
+      --this.listarNumeroPagina;
+      this.listarNotariosParaDiaInhabil()
+    }
+  }
+
+  listarNotariosParaDiaInhabil() {
+    this._diaInhabilService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+      response => {
+        if (response.content) {
+          this.diasInhabiles = response.content;
+          this.dataSource2 = new MatTableDataSource<DiaInhabil>(this.diasInhabiles);
+          console.log(this.diasInhabiles);
+          this.primeraPagina = response.first;
+          this.ultimaPagina = response.last;
+          this.cantidadActual = response.numberOfElements;
+          this.status = 'ok';
+        }
+      }, error => {
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'error';
+        }
+      }
+    );
   }
 
   displayedColumns: string[] = ['select', 'codigo', 'descripcion'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-  selection = new SelectionModel<PeriodicElement>(true, []);
+  dataSource = new MatTableDataSource<DiaInhabil>(this.diasInhabiles);
+  selection = new SelectionModel<DiaInhabil>(false, []);
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -78,6 +287,15 @@ export class DiasInhabilesComponent implements OnInit {
     return numSelected === numRows; 
   }
 
+  imprimir() {
+    //REVISAR
+    this.diaInhabilSeleccionado = this.selection.selected.map(row => row.code);
+    console.log(this.diaInhabilSeleccionado[0]);
+    if (this.diaInhabilSeleccionado[0]) {
+      this.setNotario(this.diaInhabilSeleccionado[0]);
+    }
+    //    console.table(this.selection.selected)
+  }
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
@@ -86,11 +304,11 @@ export class DiasInhabilesComponent implements OnInit {
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: PeriodicElement): string {
+  checkboxLabel(row?: DiaInhabil): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.codigo + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.code + 1}`;
   }
 
 }
@@ -118,3 +336,36 @@ export class DialogDiaInhabil {
 
 }
 
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'eliminar.html',
+  styleUrls: ['./dias-inhabiles.component.css']
+})
+export class DialogEliminarDiaInhabil {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogEliminarDiaInhabil>,
+    @Inject(MAT_DIALOG_DATA) public data: DiaInhabil) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'editar.html',
+  styleUrls: ['./dias-inhabiles.component.css']
+})
+export class DialogActualizarDiaInhabil {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogActualizarDiaInhabil>,
+    @Inject(MAT_DIALOG_DATA) public data: DiaInhabil) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}

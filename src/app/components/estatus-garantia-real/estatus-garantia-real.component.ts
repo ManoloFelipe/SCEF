@@ -93,6 +93,7 @@ export class EstatusGarantiaRealComponent implements OnInit {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
+          alert(error.description)
           this.status = 'error';
         }
       }
@@ -100,7 +101,7 @@ export class EstatusGarantiaRealComponent implements OnInit {
   }
 
   agregar() {
-    this._estatusGarantia.crearEstatusGarantiaReal(this.estatusGarantiaModel).subscribe(
+    this._estatusGarantia.crearEstatusGarantia(this.estatusGarantiaModel).subscribe(
       response => {
         console.log(response)
         this.listarGarantiasRealesParaTabla();
@@ -122,7 +123,7 @@ export class EstatusGarantiaRealComponent implements OnInit {
 
   displayedColumns: string[] = ['select','estatus', 'descripcion'];
   dataSource = new MatTableDataSource<EstatusGarantiaReal>(this.estatusGarantias);
-  selection = new SelectionModel<EstatusGarantiaReal>(true, []);
+  selection = new SelectionModel<EstatusGarantiaReal>(false, []);
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {

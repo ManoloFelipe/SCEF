@@ -25,9 +25,9 @@ export class CategoriaSibService {
     return this._http.delete(this.url + 'categoria/delete?empresa=1&codigo='+id);
   }
 
-  actualizarAlmacenadora(categoria: CategoriaSib):Observable<any>{
+  actualizarCategoria(categoria: CategoriaSib):Observable<any>{    
     var params = JSON.stringify(categoria)
-    return this._http.patch(this.url + 'categoria/update', params, {headers: this.headers});
+    return this._http.put(this.url + 'categoria/update', params, {headers: this.headers});
   }
 
   crearCategoria(categoria: CategoriaSib):Observable<any>{

@@ -1,20 +1,26 @@
+<mat-card class="centro">
+  <mat-card-title>Formas de Pago</mat-card-title>
+</mat-card>
+<br>
+<br>
 <form>
+  <table class="centro">
+
     <p>
-        <mat-form-field appearance="outline">
-          <mat-label>Código</mat-label>
-          <input matInput placeholder="Ingrese el código">
-          <mat-icon matSuffix>done</mat-icon>
-          <mat-hint>Agregar Código</mat-hint>
-        </mat-form-field>
-      </p>
-      <p>
-        <mat-form-field appearance="outline">
-          <mat-label>Descripción</mat-label>
-          <input matInput placeholder="Ingrese la Descripción">
-          <mat-icon matSuffix>done</mat-icon>
-          <mat-hint>Agregar Descripción</mat-hint>
-        </mat-form-field>
-      </p>
-  <button mat-button (click)="onNoClick()">No Thanks!</button>
-  <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Introduce el Codigo" [(ngModel)]="data.codigo"
+          [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width">
+        <textarea matInput placeholder="Descripcion" [(ngModel)]="data.descripcion"
+          [ngModelOptions]="{standalone: true}"></textarea>
+      </mat-form-field>
+    </p>
+
+  </table>  
+  <br>
+
+  <button mat-button [mat-dialog-close]="">Cancelar</button>
+  <button type="submit" mat-button [mat-dialog-close]="data" cdkFocusInitial>Guardar</button>
 </form>

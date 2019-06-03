@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {SelectionModel} from '@angular/cdk/collections';
-import {MatTableDataSource} from '@angular/material';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { CategoriaSibService } from 'src/app/services/categoria-sib.service';
 import { CategoriaSib } from 'src/app/models/categoriaSib.model';
 
@@ -15,12 +15,13 @@ export class CategoriasSIBComponent implements OnInit {
   public categorias: CategoriaSib[];
   public status: string;
   public numeroPagina: number = 0;
-  public numeroItems: number = 7;
+  public numeroItems: number = 5;
   public primeraPagina: boolean;
   public ultimaPagina: boolean;
   public cantidadActual: number;
   public categoriaModel: CategoriaSib;
   public categoriaEditable: CategoriaSib;
+  public categoriaSeleccionada: string[];
   public dataSource2;
 
   constructor(public dialog: MatDialog, private _categoriaService: CategoriaSibService) {
@@ -51,24 +52,34 @@ export class CategoriasSIBComponent implements OnInit {
   openDialogDelete(): void {
     const dialogRef = this.dialog.open(DailogEliminarCategoriaSIB, {
       width: '500px',
-      data: {codigo: this.categoriaModel.codigo, descripcion: this.categoriaModel.descripcion}
+      data: {codigo: this.categoriaEditable.codigo, descripcion: this.categoriaEditable.descripcion}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.categoriaModel.descripcion = result.descripcion;
+      this.categoriaEditable.codigo = result.codigo;
+      this.categoriaEditable.descripcion = result.descripcion;
+      console.log(this.categoriaEditable)
+      this.eliminar(this.categoriaEditable.codigo);  
+      this.limpiarVariables();    
     });
   }
 
   openDialogEdit(): void {
     const dialogRef = this.dialog.open(DailogEditarCategoriaSIB, {
       width: '500px',
-      data: {codigo: this.categoriaModel.codigo, descripcion: this.categoriaModel.descripcion}
+      data: { codigo: this.categoriaEditable.codigo, descripcion: this.categoriaEditable.descripcion }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.categoriaEditable.descripcion = result.descripcion;
+      if (result != undefined) {
+        this.categoriaEditable.codigo = result.codigo;
+        this.categoriaEditable.descripcion = result.descripcion;
+        console.log(result);
+        console.table(this.categoriaEditable);
+        this.editar();
+      }
     });
   }
 
@@ -102,6 +113,29 @@ export class CategoriasSIBComponent implements OnInit {
     );
   }
 
+  editar() {
+    this._categoriaService.actualizarCategoria(this.categoriaEditable).subscribe(
+      response =>{
+        console.log(response);
+        this.listarCategoriasParaTabla();
+        if(response.code ==0){
+          this.status = 'ok';
+        }else{
+          alert(response.description);
+        }
+
+      },
+      error =>{
+        let errorMessage =<any>error;
+        console.log(errorMessage);
+        if(errorMessage !=null){
+          alert(error.description);
+          this.status = 'error'
+        }
+      }
+    );
+  }
+
   listarCategoriasParaTabla() {
     this._categoriaService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
       response => {
@@ -124,9 +158,53 @@ export class CategoriasSIBComponent implements OnInit {
     );
   }
 
+  eliminar(id){
+    if(this.categoriaSeleccionada == undefined) return;
+    this._categoriaService.eliminarCategoria(id).subscribe(
+      response => {        
+        console.log(response);
+        if (response.code == 0) {          
+          this.categoriaEditable = response;
+          console.table(this.categoriaEditable)
+          this.listarCategoriasParaTabla()
+          this.status = 'ok';
+        } else {
+          this.status = 'error';
+        }
+      }, error => {
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'error';
+        }
+      }      
+    );
+  }
+
+  setCategoria(id){
+    if(this.categoriaSeleccionada == undefined) return;
+    this._categoriaService.listarCategoria(id).subscribe(
+      response => {
+        if (response.code == 0) {
+          this.categoriaEditable = response;
+          console.table(this.categoriaEditable)
+          this.status = 'ok';
+        } else {
+          this.status = 'error';
+        }
+      }, error => {
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'error';
+        }
+      }
+    );
+  }
+
   displayedColumns: string[] = ['select', 'codigo','descripcion'];
   dataSource = new MatTableDataSource<CategoriaSib>(this.categorias);
-  selection = new SelectionModel<CategoriaSib>(true, []);
+  selection = new SelectionModel<CategoriaSib>(false, []);
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -135,11 +213,20 @@ export class CategoriasSIBComponent implements OnInit {
     return numSelected === numRows;
   }
 
+  imprimir() {
+    this.categoriaSeleccionada = this.selection.selected.map(row => row.codigo);
+    console.log(this.categoriaSeleccionada[0]);
+    if (this.categoriaSeleccionada[0]) {
+      this.setCategoria(this.categoriaSeleccionada[0]);
+    }
+    //    console.table(this.selection.selected)
+  }
+
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
+      this.selection.clear() :
+      this.dataSource2.data.forEach(row => this.selection.select(row));
   }
 
   /** The label for the checkbox on the passed row */
@@ -149,8 +236,9 @@ export class CategoriasSIBComponent implements OnInit {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.codigo + 1}`;
   }
-
 }
+
+//COMPONENTE PARA DIALOG AGREGAR
 
 @Component({
   selector: 'dialog-overview-example-dialog',
@@ -158,16 +246,21 @@ export class CategoriasSIBComponent implements OnInit {
   styleUrls: ['./categorias-sib.component.css']
 })
 export class DailogAgregarCategoriaSIB {
+  public categoriaModel: CategoriaSib;
 
   constructor(
     public dialogRef: MatDialogRef<DailogAgregarCategoriaSIB>,
-    @Inject(MAT_DIALOG_DATA) public data: CategoriaSib) {}
+    @Inject(MAT_DIALOG_DATA) public data: CategoriaSib,) {
+      this.categoriaModel = new CategoriaSib(0,'','','','1',true)
+    }
 
     onNoClick(): void {
       this.dialogRef.close();
     }
 
 }
+
+//COMPONENTE PARA DIALOG ELIMINAR
 
 @Component({
   selector: 'dialog-overview-example-dialog',
@@ -185,6 +278,8 @@ export class DailogEliminarCategoriaSIB {
     }
 
 }
+
+//COMPONENTE PARA DIALOG ACTUALIZAR
 
 @Component({
   selector: 'dialog-overview-example-dialog',

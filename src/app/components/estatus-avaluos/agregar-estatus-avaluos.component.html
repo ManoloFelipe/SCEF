@@ -1,14 +1,16 @@
 <mat-toolbar color="primary" class="encabezado">Agregar Estaus Avaluos</mat-toolbar>
+<br>
+<br>
 <div mat-dialog-content>
     <mat-form-field>
-        <input matInput placeholder="Codigo categoria">
+        <input matInput placeholder="Codigo Estatus" [(ngModel)]="data.codigo">
     </mat-form-field>
     <br>
     <mat-form-field>
-        <input matInput placeholder="Descripcion categoria">
+        <input matInput placeholder="Descripcion Estatus" [(ngModel)]="data.descripcion">
     </mat-form-field>
   </div>
   <div mat-dialog-actions>
     <button mat-button color="primary" (click)="onNoClick()">Cancelar</button>
-    <button mat-button color="primary" [mat-dialog-close]="data.estatus" cdkFocusInitial>Agregar</button>
+    <button mat-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>Agregar</button>
   </div>

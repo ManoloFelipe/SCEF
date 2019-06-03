@@ -5,15 +5,17 @@
 <td><h4>Codigo De Cobro:  </h4></td>
 <td>
 <mat-form-field>
-    <input matInput placeholder="Input">
+    <input matInput placeholder="Introduce el codigo de cobro" [(ngModel)]="data.codigo"
+    [ngModelOptions]="{standalone: true}">
     </mat-form-field>
 </td>
 </tr>
 <tr>
-<td><h4>Descripcion:  </h4></td>
+<td><h4>Descripción:  </h4></td>
 <td>
 <mat-form-field>
-<input matInput placeholder="Input">
+    <input matInput placeholder="Introduce la Descripción" [(ngModel)]="data.descripcion"
+    [ngModelOptions]="{standalone: true}">
 </mat-form-field>
 </td>
 </tr>
@@ -21,12 +23,13 @@
 <td><h4>Descripcion Por Reportes:</h4></td>
 <td>
 <mat-form-field>
-    <input matInput placeholder="Input">
+    <input matInput placeholder="Introduce el descripcion por Reportes" [(ngModel)]="data.descripcionCorta"
+    [ngModelOptions]="{standalone: true}">
     </mat-form-field>
 </td>
 </tr>
 </table > 
       <!--<button mat-button (click)="onNoClick()">Cancelar</button>-->
-         <button mat-button [mat-dialog-close]="">Cancelar</button>
-  <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Guardar</button>
-</form>
+      <button mat-button [mat-dialog-close]="">Cancelar</button>
+      <button type="submit" mat-button [mat-dialog-close]="data" cdkFocusInitial>Guardar</button>
+    </form>

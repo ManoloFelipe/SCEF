@@ -3,19 +3,22 @@
 <form class="example-form">
     <div mat-dialog-content>  
         <mat-form-field>
-            <input matInput placeholder="Codigo">
+            <input matInput placeholder="Codigo" [(ngModel)]="data.codigo"
+            [ngModelOptions]="{standalone: true}">
         </mat-form-field>
         <br>
         <mat-form-field>
-            <input matInput placeholder="Descripcion">
+            <input matInput placeholder="Descripcion" [(ngModel)]="data.descripcion"
+            [ngModelOptions]="{standalone: true}">
         </mat-form-field>
         <br>
         <mat-form-field>
-            <input matInput placeholder="Equivalente">
+            <input matInput placeholder="Equivalente" [(ngModel)]="data.equivalencia"
+            [ngModelOptions]="{standalone: true}">
         </mat-form-field>
       </div>
   </form>
   <div mat-dialog-actions>
-    <button mat-button color="primary" (click)="onNoClick()">Cancelar</button>
-    <button mat-button color="primary" [mat-dialog-close]="data.estatus" cdkFocusInitial>Editar</button>
+    <button mat-button  [mat-dialog-close]="">Cancelar</button>
+    <button type="submit" mat-button  [mat-dialog-close]="data" cdkFocusInitial>Editar</button>
   </div>

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {HttpHeaders,HttpClient} from '@angular/common/http';
-import {GLOBAL} from './global.service'
-import { EstatusGarantiaReal } from '../models/estatus-garantia-real.model'
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { GLOBAL } from './global.service';
 import { Observable } from 'rxjs';
+import { EstatusGarantiaReal } from '../models/estatus-garantia-real.model';
 
 @Injectable()
 export class EstatusGarantiaRealService {
@@ -14,8 +14,8 @@ export class EstatusGarantiaRealService {
     this.url = GLOBAL.url
    }
 
-   listarPagina(numeroPagina, numeroItems):Observable<any> {
-    return this._http.get(this.url + 'statusGarantiaReal/listPage?page='+numeroPagina+'&size='+numeroItems+'&sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers});
+  listarPagina(numeroPagina, numeroItems):Observable<any> {
+    return this._http.get(this.url + 'statusGarantiaReal/listPage?page='+numeroPagina+'&size='+numeroItems,{headers: this.headers});
   }
 
   listarEstatusGarantia(id):Observable<any>{
@@ -28,7 +28,7 @@ export class EstatusGarantiaRealService {
 
   actualizarEstatusGarantia(estatus: EstatusGarantiaReal):Observable<any>{
     var params = JSON.stringify(estatus)
-    return this._http.patch(this.url+'statusGarantiaReal/update',params,{headers:this.headers})
+    return this._http.put(this.url+'statusGarantiaReal/update',params,{headers:this.headers})
   }
 
   crearEstatusGarantia(estatus: EstatusGarantiaReal):Observable<any>{

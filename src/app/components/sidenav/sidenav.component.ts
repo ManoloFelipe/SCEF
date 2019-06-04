@@ -31,18 +31,18 @@ const ELEMENT_DATA: PeriodicElement[] = [
   
   // {descripcion: 'Datos Generales de Registro y Control', enlace:'datosGeneralesRC'},
   {descripcion: 'Destinos', enlace:'destinos'},
-  // {descripcion: 'Dias Inhabiles', enlace:'diasInhabiles'},
+  {descripcion: 'Dias Inhabiles', enlace:'diasInhabiles'},
   // {descripcion: 'Documentos por Producto', enlace:'documentosProducto'},
   
   // {descripcion: 'Enlaces de Contabilidad', enlace:'enlaceContabilidad'},
   // {descripcion: 'Estados de Prestamos', enlace:'estadosPrestamos'},
   {descripcion: 'Estatus de Avaluos', enlace:'estatusAvaluos'},
-  // {descripcion: 'Estatus de Garantia Real', enlace:'estatusGarantiaReal'},
+  {descripcion: 'Estatus de Garantia Real', enlace:'estatusGarantiaReal'},
   // {descripcion: 'Estatus Legal', enlace:'estatusLegales'},
   // {descripcion: 'Ecentos de Solicitudes', enlace:'eventosSolicitudes'},
   
   // {descripcion: 'Frecuencias de Amortizacion', enlace:'frecuenciasAmortizacion'},
-  // {descripcion: 'Formas de Desembolso', enlace:'formasDesembolso'},
+  {descripcion: 'Formas de Desembolso', enlace:'formasDesembolso'},
   {descripcion: 'Formas Pago', enlace:'formasPago'},
   
   // {descripcion: 'Garantias Contables', enlace:'garantiasContables'},
@@ -55,7 +55,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {descripcion: 'Lugares de Inversion', enlace:'lugaresInversion'},
   
   // {descripcion: 'Montos Plazo', enlace:'montosPlazo'}, 
-  {descripcion: 'Motivos Ajueste', enlace:'motivosAjuste'},
+  {descripcion: 'Motivos Ajuste', enlace:'motivosAjuste'},
   // {descripcion: 'Motivos Reserva', enlace:'motivosReserva'},
   // {descripcion: 'Motivos de Refencia al Cliente', enlace:'motivosReferenciaCliente'},
   {descripcion: 'Medios Contacto', enlace:'mediosContacto'},

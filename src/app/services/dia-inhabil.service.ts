@@ -17,11 +17,11 @@ export class DiaInhabilService {
   }
 
   listarPagina(numeroPagina, numeroItems):Observable<any>{
-    return this._http.get(this.url + 'diasNoHabilesNoCobroMora/listPage?page='+numeroPagina+'&size='+numeroItems+'&sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers});
+    return this._http.get(this.url + 'diasNoHabilesNoCobroMora/listPage?page='+numeroPagina+'&size='+numeroItems,{headers: this.headers});
   }
 
-  listarDiaInhabil(id):Observable<any>{
-    return this._http.get(this.url + 'diasNoHabilesNoCobroMora/read?empresa=1&codigo='+id);
+  listarDiaInhabil(fechaFeriado, tipoFeriado):Observable<any>{
+    return this._http.get(this.url + 'diasNoHabilesNoCobroMora/read?empresa=1&fechaFeriado='+fechaFeriado+'tipoFeriado='+tipoFeriado);
   }
 
   eliminarDiaInhabil(id):Observable<any>{

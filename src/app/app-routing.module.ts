@@ -18,7 +18,7 @@ import { DestinosComponent } from './components/destinos/destinos.component';
 import { DiasInhabilesComponent } from './components/dias-inhabiles/dias-inhabiles.component';
 import { EstatusAvaluosComponent } from './components/estatus-avaluos/estatus-avaluos.component';
 import { EstatusGarantiaRealComponent } from './components/estatus-garantia-real/estatus-garantia-real.component';
-import { FormasDesembolsoComponent } from './components/formas-desembolso/formas-desembolso.component';
+import { FormasDesembolsoComponent } from './components/formas-desembolso/forma-desembolso.component';
 import { FormasPagoComponent } from './components/formas-pago/formas-pago.component';
 import { FrecuenciasAmortizacionComponent } from './components/frecuencias-amortizacion/frecuencias-amortizacion.component';
 import { GarantiasContablesComponent } from './components/garantias-contables/garantias-contables.component';

@@ -22,16 +22,21 @@ export class EstatusGarantiaRealComponent implements OnInit {
   public cantidadActual: number;
   public estatusGarantiaModel: EstatusGarantiaReal;
   public estatusGarantiaEditable: EstatusGarantiaReal;
+  public estatusSeleccionado: string[];
   public dataSource2;
 
   constructor(public dialog: MatDialog, private _estatusGarantia: EstatusGarantiaRealService) {
     this.limpiarVariables()
   }
 
+  applyFilter(filterValue: string) {
+    this.dataSource2.filter = filterValue.trim().toLowerCase(); 
+  }
+
   openDialogAdd(): void {
     const dialogRef = this.dialog.open(DailogAgregarEstatusGarantiaReal, {
       width: '500px',
-      data: {estatus: this.estatusGarantiaModel.codigo, descripcion: this.estatusGarantiaModel.descripcion}
+      data: {codigo: this.estatusGarantiaModel.codigo, descripcion: this.estatusGarantiaModel.descripcion}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -45,26 +50,36 @@ export class EstatusGarantiaRealComponent implements OnInit {
   openDialogEdit(): void {
     const dialogRef = this.dialog.open(DailogEditarEstatusGarantiaReal, {
       width: '500px',
-      data: {estatus: this.estatusGarantiaModel.codigo, descripcion: this.estatusGarantiaModel.descripcion}
+      data: {codigo: this.estatusGarantiaEditable.codigo, descripcion: this.estatusGarantiaEditable.descripcion}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.estatusGarantiaModel.codigo = result.codigo
-      this.estatusGarantiaModel.descripcion = result.descripcion;
+      if (result != undefined) {
+        this.estatusGarantiaEditable.codigo = result.codigo
+        this.estatusGarantiaEditable.descripcion = result.descripcion;
+        console.log(result);
+        console.table(this.estatusGarantiaEditable);
+        this.editar()
+      }      
     });
   }
 
   openDialogDelete(): void {
     const dialogRef = this.dialog.open(DailogEliminarEstatusGarantiaReal, {
       width: '500px',
-      data: {estatus: this.estatusGarantiaModel.codigo, descripcion: this.estatusGarantiaModel.descripcion}
+      data: {codigo: this.estatusGarantiaEditable.codigo, descripcion: this.estatusGarantiaEditable.descripcion}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.estatusGarantiaModel.codigo = result.codigo
-      this.estatusGarantiaModel.descripcion = result.descripcion;
+      console.log('The dialog was closed');      
+      if (result != undefined) {
+        this.estatusGarantiaEditable.codigo = result.codigo
+        this.estatusGarantiaEditable.descripcion = result.descripcion;
+        console.log(result);
+        console.table(this.estatusGarantiaEditable);
+        this.eliminar(this.estatusSeleccionado[0]);
+      }
     });
   }
 
@@ -100,6 +115,27 @@ export class EstatusGarantiaRealComponent implements OnInit {
     );
   }
 
+  setEstatusGarantia(id){
+    if(this.estatusSeleccionado == undefined) return;
+    this._estatusGarantia.listarEstatusGarantia(id).subscribe(
+      response => {
+        if (response.code == 0) {
+          this.estatusGarantiaEditable = response;
+          console.log(this.estatusGarantiaEditable)
+          this.status = 'ok';
+        } else {
+          this.status = 'error';
+        }
+      }, error => {
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'error';
+        }
+      }
+    );
+  }
+
   agregar() {
     this._estatusGarantia.crearEstatusGarantia(this.estatusGarantiaModel).subscribe(
       response => {
@@ -121,7 +157,52 @@ export class EstatusGarantiaRealComponent implements OnInit {
     );
   }
 
-  displayedColumns: string[] = ['select','estatus', 'descripcion'];
+  editar(){
+    this._estatusGarantia.actualizarEstatusGarantia(this.estatusGarantiaEditable).subscribe(
+      response => {
+        console.log(response);
+        this.listarGarantiasRealesParaTabla();
+        if (response.code == 0) {
+          this.status = 'ok';
+        } else {
+          alert(response.description);
+        }
+      }, error => {
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          alert(error.description);
+          this.status = 'error';
+        }
+      }
+    );
+  }
+  
+  eliminar(id){
+    if(this.estatusSeleccionado == undefined) return;
+    this._estatusGarantia.eliminarEstatusGarantia(id).subscribe(
+      response => {
+        console.log(response);
+        if (response.code == 0) {          
+          this.estatusGarantiaEditable = response;
+          console.log(this.estatusGarantiaEditable)
+          this.status = 'ok';
+          this.listarGarantiasRealesParaTabla();
+        } else {
+          alert(response.description);
+          this.status = 'error';
+        }
+      }, error => {
+        let errorMessage = <any>error;
+        console.log(errorMessage);
+        if (errorMessage != null) {
+          this.status = 'error';
+        }
+      }
+    );
+  }
+
+  displayedColumns: string[] = ['select','codigo', 'descripcion'];
   dataSource = new MatTableDataSource<EstatusGarantiaReal>(this.estatusGarantias);
   selection = new SelectionModel<EstatusGarantiaReal>(false, []);
 
@@ -130,6 +211,16 @@ export class EstatusGarantiaRealComponent implements OnInit {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
+  }
+
+  /*Selecciona un dato*/
+  imprimir() {
+    this.estatusSeleccionado = this.selection.selected.map(row => row.codigo);
+    console.log(this.estatusSeleccionado[0]);
+    if (this.estatusSeleccionado[0]) {
+      this.setEstatusGarantia(this.estatusSeleccionado[0]);
+    }
+    //    console.table(this.selection.selected)
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */

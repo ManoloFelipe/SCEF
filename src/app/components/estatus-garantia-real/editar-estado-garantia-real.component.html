@@ -1,15 +1,15 @@
 <mat-toolbar color="primary" class="encabezado">Editar Estado Garantia</mat-toolbar>
 <br>
 <div mat-dialog-content>  
-    <mat-form-field>
-        <input matInput placeholder="Codigo categoria">
-    </mat-form-field>
-    <br>
-    <mat-form-field>
-        <input matInput placeholder="Descripcion categoria">
-    </mat-form-field>
-  </div>
+      <mat-form-field>
+        <input matInput placeholder="Codigo categoria" [(ngModel)]="data.codigo" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <input matInput placeholder="Descripcion categoria" [(ngModel)]="data.descripcion" [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
+    </div>  
   <div mat-dialog-actions>
     <button mat-button color="primary" (click)="onNoClick()">Cancelar</button>
-    <button mat-button color="primary" [mat-dialog-close]="data.estatus" cdkFocusInitial>Editar</button>
+    <button mat-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>Editar</button>
   </div>

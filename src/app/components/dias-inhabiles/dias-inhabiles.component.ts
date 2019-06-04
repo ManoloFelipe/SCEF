@@ -17,7 +17,8 @@ export class DiasInhabilesComponent implements OnInit {
   checked2 = false;
   checked3 = false;
   public diasInhabiles: DiaInhabil[];
-  public diaInhabilSeleccionado: number[];
+  public diaInhabilSeleccionado2: string[];
+  public diaInhabilSeleccionado: Date[];
   public status: string;
   public numeroPagina: number = 0;
   public numeroItems: number = 7;
@@ -54,9 +55,9 @@ export class DiasInhabilesComponent implements OnInit {
   }
 
 
-  setNotario(id) {
+  setNotario(fechaFeriado, tipoFeriado) { 
     if(this.diaInhabilSeleccionado == undefined) return;
-    this._diaInhabilService.listarDiaInhabil(id).subscribe(
+    this._diaInhabilService.listarDiaInhabil(fechaFeriado,tipoFeriado).subscribe(
       response => {
         if (response.code == 0) {
           this.diaInhabilEditable = response;
@@ -276,7 +277,7 @@ export class DiasInhabilesComponent implements OnInit {
     );
   }
 
-  displayedColumns: string[] = ['select', 'codigo', 'descripcion'];
+  displayedColumns: string[] = ['select', 'codigo', 'descripcion','fecha'];
   dataSource = new MatTableDataSource<DiaInhabil>(this.diasInhabiles);
   selection = new SelectionModel<DiaInhabil>(false, []);
 
@@ -289,10 +290,12 @@ export class DiasInhabilesComponent implements OnInit {
 
   imprimir() {
     //REVISAR
-    this.diaInhabilSeleccionado = this.selection.selected.map(row => row.code);
+    this.diaInhabilSeleccionado = this.selection.selected.map(row => row.fechaFeriado);
+    this.diaInhabilSeleccionado2 = this.selection.selected.map(row => row.tipoFeriado);
     console.log(this.diaInhabilSeleccionado[0]);
+    console.log(this.diaInhabilSeleccionado2[0]);
     if (this.diaInhabilSeleccionado[0]) {
-      this.setNotario(this.diaInhabilSeleccionado[0]);
+      this.setNotario(this.diaInhabilSeleccionado[0],this.diaInhabilSeleccionado2[0]);
     }
     //    console.table(this.selection.selected)
   }
@@ -308,7 +311,7 @@ export class DiasInhabilesComponent implements OnInit {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.code + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.tipoFeriado + 1}`;
   }
 
 }

@@ -14,7 +14,7 @@ export class FormaDesembolsoService {
   }
 
   listarPagina(numeroPagina, numeroItems):Observable<any> {
-    return this._http.get(this.url + 'formaDesembolso/listPage?page='+numeroPagina+'&size='+numeroItems+'&sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers});
+    return this._http.get(this.url + 'formaDesembolso/listPage?page='+numeroPagina+'&size='+numeroItems,{headers: this.headers});
   }
 
   listarFormaDes(id):Observable<any>{
@@ -27,7 +27,7 @@ export class FormaDesembolsoService {
 
   actualizarFormaDes(poder: FormaDesembolso):Observable<any>{
     var params = JSON.stringify(poder)
-    return this._http.put(this.url + 'formaDesembolso/update', params, {headers: this.headers});
+    return this._http.patch(this.url + 'formaDesembolso/update', params, {headers: this.headers});
   }
 
   crearFormaDes(poder: FormaDesembolso):Observable<any>{

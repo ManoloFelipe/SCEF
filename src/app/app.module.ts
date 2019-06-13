@@ -53,7 +53,9 @@ import { DestinosComponent,
          DialogActualizarDestino,
          DialogEliminarDestino, } from './components/destinos/destinos.component';
 import { DiasInhabilesComponent, 
-         DialogDiaInhabil} from './components/dias-inhabiles/dias-inhabiles.component';
+         DialogDiaInhabil,
+         DialogActualizarDiaInhabil,
+         DialogEliminarDiaInhabil,} from './components/dias-inhabiles/dias-inhabiles.component';
 import { EstatusAvaluosComponent, 
          DailogAgregarEstatusAvaluos,
          DailogEditarEstatusAvaluos, 
@@ -254,6 +256,8 @@ import { HttpClientModule } from '@angular/common/http';
     DialogActualizarNotario,
     MotivosAjustesComponent,
     DiasInhabilesComponent,
+    DialogActualizarDiaInhabil,
+    DialogEliminarDiaInhabil,
     CobrosAdicionalesComponent,
     InstitucionesCobrosAdicionalesComponent,
     MotivosReservasComponent,
@@ -473,6 +477,8 @@ import { HttpClientModule } from '@angular/common/http';
     DialogActualizarDestino,
     DialogEliminarDestino,
     DialogDiaInhabil,
+    DialogActualizarDiaInhabil,
+    DialogEliminarDiaInhabil,
     DialogFormas,
     DialogAgregarMotivoAjuste,
     DialogActualizarMotivoAjuste,

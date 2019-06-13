@@ -17,8 +17,8 @@
   
     table{
       position: relative;
-      left: 36%;
-      width: 30%;
+      margin: 0 auto;
+    width: 80%;
     }
   
     mat-card mat-card-title{

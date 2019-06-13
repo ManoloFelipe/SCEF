@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { Notario } from 'src/app/models/notarios.models';
 import { NotarioService } from 'src/app/services/notario.service';
 
@@ -18,7 +19,7 @@ export class NotariosComponent implements OnInit {
   public notarioSeleccionado: number[];
   public status: string;
   public numeroPagina: number = 0;
-  public numeroItems: number = 7;
+  public numeroItems: number = 5;
   public primeraPagina: boolean;
   public ultimaPagina: boolean;
   public listarNumeroPagina: number = 0;
@@ -37,7 +38,7 @@ export class NotariosComponent implements OnInit {
   timeLeft: number;
   interval;
 
-  constructor(public dialog: MatDialog, private _notarioService: NotarioService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _notarioService: NotarioService) {
     this.limpiarVariables();
   }
 
@@ -145,7 +146,7 @@ startTimer() {
 
   openDialogEdit(): void {
     const dialogRef = this.dialog.open(DialogActualizarNotario, {
-      width: '500px',
+      width: '60%',
       data: { codigo: this.notarioEditable.codigo, direccion: this.notarioEditable.direccion,
               nombre: this.notarioEditable.nombre, cheque: this.notarioEditable.cheque,
               colegiado: this.notarioEditable.colegiado, identificacion: this.notarioEditable.identificacion,
@@ -176,15 +177,17 @@ startTimer() {
         console.log(response);
         this.listarNotariosParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarVariables()
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -197,15 +200,17 @@ startTimer() {
         console.log(response)
         this.listarNotariosParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarVariables()
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -220,14 +225,18 @@ startTimer() {
           this.listarNotariosParaTabla();
           this.notarioEditable = response;
           console.log(this.notarioEditable)
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarVariables()
         } else {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }

@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { FormaDesembolso } from 'src/app/models/forma-desembolso.model';
 import { FormaDesembolsoService } from 'src/app/services/forma-desembolso.service';
 
@@ -27,7 +28,7 @@ export class FormasDesembolsoComponent implements OnInit {
 
   public dataSource2;
 
-  constructor(public dialog: MatDialog, private _formaDesService: FormaDesembolsoService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _formaDesService: FormaDesembolsoService) {
     this.limpiarVariables();
   }
 
@@ -50,6 +51,7 @@ export class FormasDesembolsoComponent implements OnInit {
         console.log(result);
         console.table(this.formaDesModel);
         this.agregar();
+        this.limpiarVariables()
       }
     });
   }
@@ -69,6 +71,7 @@ export class FormasDesembolsoComponent implements OnInit {
         console.log(result);
         console.table(this.formaDesEditable);
         this.editar();
+        this.limpiarVariables()
       }
     });
   }
@@ -86,6 +89,7 @@ export class FormasDesembolsoComponent implements OnInit {
         this.formaDesEditable.descripcion = result.descripcion;
         console.log(result);
         console.table(this.formaDesEditable);
+        this.limpiarVariables()
       }
     });
   }
@@ -104,6 +108,7 @@ export class FormasDesembolsoComponent implements OnInit {
         console.log(result);
         console.table(this.formaDesEditable);
         this.eliminar(this.formaDesSeleccionado[0]);
+        this.limpiarVariables()
       }
     });
   }
@@ -180,9 +185,10 @@ export class FormasDesembolsoComponent implements OnInit {
         console.log(response)
         this.listarPoderesParaTabla();
         if (response.code == 0) {
+          this.snackBar.open('Agregado exitosamente','',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
@@ -201,9 +207,10 @@ export class FormasDesembolsoComponent implements OnInit {
         console.log(response);
         this.listarPoderesParaTabla();
         if (response.code == 0) {
+          this.snackBar.open('Actualizado exitosamente','',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
@@ -220,11 +227,14 @@ export class FormasDesembolsoComponent implements OnInit {
     if(this.formaDesSeleccionado == undefined) return;
     this._formaDesService.eliminarFormaDes(id).subscribe(
       response => {
+        this.listarPoderesParaTabla()
         if (response.code == 0) {
           this.formaDesEditable = response;
           console.log(this.formaDesEditable)
+          this.snackBar.open('Eliminado exitosamente','',{duration: 3000});
           this.status = 'ok';
         } else {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
         }
       }, error => {

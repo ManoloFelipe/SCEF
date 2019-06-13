@@ -7,21 +7,22 @@ matRipple
 [matRippleColor]="color">
 <!-- <mat-toolbar style="cursor:pointer;" onClick="history.back()" class="encabezado" class="color" >Días Inhabiles</mat-toolbar> -->
 
-<mat-spinner class="capa1" *ngIf="mostrar"></mat-spinner>
+<mat-card class="centro">
+  <mat-card-title>Días Inhabiles</mat-card-title>
+</mat-card>
+<br>
+<br>
 
-<table class="centroTabla">
-    <tr>
-      <td><h4>Seleccionar el nombre:  </h4></td>
-      <td>
-          <p>
-              <mat-form-field appearance="outline">
-                <input matInput placeholder="Ingrese el nombre">
-                <mat-icon matSuffix>search</mat-icon>
-              </mat-form-field>
-            </p>
-      </td>
-    </tr>
-  </table > 
+<div class="example-form">
+  <mat-form-field appearance="outline">
+    <mat-label>Buscar</mat-label>
+    <input matInput placeholder="Ingrese el codigo" (keyup)="applyFilter($event.target.value)">
+    <mat-hint>Buscar por codigo</mat-hint>
+  </mat-form-field>
+  <button mat-icon-button>
+    <mat-icon matSuffix>search</mat-icon>
+  </button>
+</div>
 
 <table width="80%" mat-table (click)="imprimir()" [dataSource]="dataSource2" class="centroTabla">
 
@@ -68,31 +69,18 @@ matRipple
   <br>
   <div class="centro">
       
-    <button title="home" mat-icon-button style=" background: #5F6A6A; margin-left: 12px" routerLink="home">
+    <button title="home" mat-icon-button style="color:white; background: #5F6A6A; margin-left: 12px" routerLink="home">
       <mat-icon>home</mat-icon>
   </button>
-    <button title="Agregar registro" mat-icon-button style=" background: #5F6A6A; margin-left: 12px" (clic)='openDailog()' (click)='startTimer()' >
+    <button title="Agregar registro" mat-icon-button style="color:white; background: #5F6A6A; margin-left: 12px" (clic)='openDailog()'>
       <mat-icon>note_add</mat-icon>
   </button>
-    <button title="Eliminar registro" mat-icon-button style=" background: #5F6A6A; margin-left: 12px" (click)="openDialogDelete()">
+    <button title="Eliminar registro" mat-icon-button style=" color:white;background: #5F6A6A; margin-left: 12px" (click)="openDialogDelete()">
         <mat-icon>delete_sweep</mat-icon>
     </button>
-    <button title="Editar registro" mat-icon-button style=" background: #5F6A6A; margin-left: 12px" (click)="openDialogEdit()">
+    <button title="Editar registro" mat-icon-button style="color:white;background: #5F6A6A; margin-left: 12px" (click)="openDialogEdit()">
         <mat-icon>create</mat-icon>
     </button>
-    
-  
   </div>
-<br>
-<br>
-<form>
-  <button class="posicionFija" style=" background: #5F6A6A;margin-left: 95%; color: beige;" title="Ayuda" mat-icon-button >
-    <mat-icon>help</mat-icon>
-</button>
-</form>
-  <!-- <button (click)='startTimer()'>Start Timer</button>
-  <button (click)='pauseTimer()'>Pause</button>
-  
-  <p>{{timeLeft}} Seconds Left....</p>  -->
 
   </body>

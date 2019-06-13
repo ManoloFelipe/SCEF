@@ -18,7 +18,7 @@
 <div class="example-form">
   <mat-form-field appearance="outline">
     <mat-label>Buscar</mat-label>
-    <input matInput placeholder="Ingrese el codigo" (keyup)="applyFilter($event.target.value)">
+    <input matInput (keyup)="applyFilter($event.target.value)">
     <mat-hint>Buscar por codigo</mat-hint>
   </mat-form-field>
   <button mat-icon-button>
@@ -28,7 +28,7 @@
 <br>
 <br>
 
-<table mat-table (click)="imprimir()" [dataSource]="dataSource2" class="mat-elevation-z8">
+<table mat-table (click)="imprimir()" [dataSource]="dataSource2" class="table">
   <!-- Checkbox Column -->
   <ng-container matColumnDef="select">
     <th mat-header-cell *matHeaderCellDef>

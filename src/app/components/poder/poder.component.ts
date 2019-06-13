@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { Poder } from 'src/app/models/poder.model';
 import { PoderService } from 'src/app/services/poder.service';
 
@@ -27,7 +28,7 @@ export class PoderComponent implements OnInit {
 
   public dataSource2;
 
-  constructor(public dialog: MatDialog, private _poderService: PoderService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _poderService: PoderService) {
     this.limpiarVariables();
   }
 
@@ -180,15 +181,18 @@ export class PoderComponent implements OnInit {
         console.log(response)
         this.listarPoderesParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarVariables()
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
+          this.limpiarVariables();
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -201,15 +205,18 @@ export class PoderComponent implements OnInit {
         console.log(response);
         this.listarPoderesParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarVariables()
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
+          this.limpiarVariables()
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -220,17 +227,23 @@ export class PoderComponent implements OnInit {
     if(this.poderSeleccionado == undefined) return;
     this._poderService.eliminarPoder(id).subscribe(
       response => {
+        this.listarPoderesParaTabla()
         if (response.code == 0) {
           this.poderEditable = response;
           console.log(this.poderEditable)
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarVariables()
         } else {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
+          this.limpiarVariables()
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }

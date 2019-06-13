@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { EstatusGarantiaReal } from 'src/app/models/estatus-garantia-real.model';
 import { EstatusGarantiaRealService } from 'src/app/services/estatus-garantia-real.service';
 
@@ -25,7 +27,7 @@ export class EstatusGarantiaRealComponent implements OnInit {
   public estatusSeleccionado: string[];
   public dataSource2;
 
-  constructor(public dialog: MatDialog, private _estatusGarantia: EstatusGarantiaRealService) {
+  constructor(public dialog: MatDialog,  public snackBar: MatSnackBar,private _estatusGarantia: EstatusGarantiaRealService) {
     this.limpiarVariables()
   }
 
@@ -44,6 +46,7 @@ export class EstatusGarantiaRealComponent implements OnInit {
       this.estatusGarantiaModel.codigo = result.codigo
       this.estatusGarantiaModel.descripcion = result.descripcion;
       this.agregar(); 
+      this.limpiarVariables();
     });
   }
 
@@ -60,7 +63,8 @@ export class EstatusGarantiaRealComponent implements OnInit {
         this.estatusGarantiaEditable.descripcion = result.descripcion;
         console.log(result);
         console.table(this.estatusGarantiaEditable);
-        this.editar()
+        this.editar();
+        this.limpiarVariables();
       }      
     });
   }
@@ -79,9 +83,12 @@ export class EstatusGarantiaRealComponent implements OnInit {
         console.log(result);
         console.table(this.estatusGarantiaEditable);
         this.eliminar(this.estatusSeleccionado[0]);
+        this.limpiarVariables();
       }
     });
   }
+
+  @ViewChild (MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
     this.listarGarantiasRealesParaTabla()
@@ -93,12 +100,13 @@ export class EstatusGarantiaRealComponent implements OnInit {
   }
 
   listarGarantiasRealesParaTabla(){
-    this._estatusGarantia.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+    this._estatusGarantia.listarPagina().subscribe(
       response => {
         if (response.content) {
           this.estatusGarantias = response.content;
           this.dataSource2 = new MatTableDataSource<EstatusGarantiaReal>(this.estatusGarantias);
           console.log(this.estatusGarantias);
+          this.dataSource2.paginator = this.paginator;   
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.cantidadActual = response.numberOfElements;
@@ -142,9 +150,10 @@ export class EstatusGarantiaRealComponent implements OnInit {
         console.log(response)
         this.listarGarantiasRealesParaTabla();
         if (response.code == 0) {
+          this.snackBar.open('Agregado exitosamente','',{duration: 3000});
           this.status = 'ok';          
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
@@ -163,9 +172,10 @@ export class EstatusGarantiaRealComponent implements OnInit {
         console.log(response);
         this.listarGarantiasRealesParaTabla();
         if (response.code == 0) {
+          this.snackBar.open('Actualizado exitosamente','',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
@@ -183,13 +193,15 @@ export class EstatusGarantiaRealComponent implements OnInit {
     this._estatusGarantia.eliminarEstatusGarantia(id).subscribe(
       response => {
         console.log(response);
+        this.listarGarantiasRealesParaTabla()
         if (response.code == 0) {          
           this.estatusGarantiaEditable = response;
           console.log(this.estatusGarantiaEditable)
+          this.snackBar.open('Eliminado exitosamente','',{duration: 3000});
           this.status = 'ok';
           this.listarGarantiasRealesParaTabla();
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
         }
       }, error => {
@@ -273,6 +285,7 @@ export class DailogEditarEstatusGarantiaReal {
     }
 
 }
+
 @Component({
   selector: 'dialog-overview-example-dialog',
   templateUrl: './eliminar-estado-garantia-real.component.html',

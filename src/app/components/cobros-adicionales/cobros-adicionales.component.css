@@ -1,13 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet');
-
-.letra{
-  font-family: 'Raleway', sans-serif;
-}
-
 .example-form {
   min-width: 150px;
   max-width: 500px;
   width: 100%;
+  margin: 0 auto;
+  text-align: center
 }
 
 .color{
@@ -33,7 +29,6 @@
 
 .centro{
     text-align: center;
-    color: beige;
 }
 
 #iconos1{
@@ -47,12 +42,12 @@
   }
 
   .centroTabla {
-    margin: auto;
-    width: 60%;
+    margin: 0 auto;
+    width: 80%;
   }
 
 .busqueda {
-  margin: auto;
+  margin: 0 auto;
 }
 
 .capa1{ position: fixed;

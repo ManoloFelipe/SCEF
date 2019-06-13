@@ -3,6 +3,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { InstitucionCobroAdicional } from 'src/app/models/institucion-cobro-adicional.model';
 import { InstitucionCobroAdicionalService } from 'src/app/services/institucion-cobro-adicional.service';
 
@@ -28,7 +29,7 @@ export class InstitucionesCobrosAdicionalesComponent implements OnInit {
 
   public dataSource2;
 
-  constructor(public dialog: MatDialog, private _institucionService: InstitucionCobroAdicionalService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _institucionService: InstitucionCobroAdicionalService) {
     this.limpiarVariables();
   }
 
@@ -104,13 +105,14 @@ export class InstitucionesCobrosAdicionalesComponent implements OnInit {
           console.log(this.instituciones);
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
-          this.listarNumeroPagina = response.numberOfElements;
+          this.listarNumeroPagina = response.numberOfElements;          
           this.status = 'ok';
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -124,14 +126,17 @@ export class InstitucionesCobrosAdicionalesComponent implements OnInit {
         if (response.code == 0) {
           this.institucionEditable = response;
           console.log(this.institucionEditable)
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
         } else {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
+          this.snackBar.open(errorMessage.description,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -144,15 +149,16 @@ export class InstitucionesCobrosAdicionalesComponent implements OnInit {
         console.log(response)
         this.listarInstitucionesCobroParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage.description,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -165,15 +171,16 @@ export class InstitucionesCobrosAdicionalesComponent implements OnInit {
         console.log(response);
         this.listarInstitucionesCobroParaTabla()
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage.description,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -188,14 +195,17 @@ export class InstitucionesCobrosAdicionalesComponent implements OnInit {
         if (response.code == 0) {
           this.institucionEditable = response;
           console.log(this.institucionEditable)
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
         } else {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
+          this.snackBar.open(errorMessage.description,'',{duration: 3000});
           this.status = 'error';
         }
       }

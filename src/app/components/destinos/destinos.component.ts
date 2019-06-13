@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { Destino } from 'src/app/models/destino.model';
 import { DestinosService } from 'src/app/services/destinos.service';
 
@@ -27,7 +29,7 @@ export class DestinosComponent implements OnInit {
 
   public dataSource2;
 
-  constructor(public dialog: MatDialog, private _almacenadoraService: DestinosService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _almacenadoraService: DestinosService) {
     this.limpiarVariables();
   }
 
@@ -50,6 +52,7 @@ export class DestinosComponent implements OnInit {
         console.log(result);
         console.table(this.almacenadoraModel);
         this.agregar();
+        this.limpiarVariables()
       }
     });
   }
@@ -69,6 +72,7 @@ export class DestinosComponent implements OnInit {
         console.log(result);
         console.table(this.almacenadoraEditable);
         this.editar();
+        this.limpiarVariables()
       }
     });
   }
@@ -87,9 +91,12 @@ export class DestinosComponent implements OnInit {
         console.log(result);
         console.table(this.almacenadoraEditable);
         this.eliminar(this.almacenadoraSeleccionada[0]);
+        this.limpiarVariables()
       }
     });
   }
+
+  @ViewChild (MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
     this.listarAlmacenadorasParaTabla();
@@ -121,6 +128,7 @@ export class DestinosComponent implements OnInit {
           this.almacenadoras = response.content;
           this.dataSource2 = new MatTableDataSource<Destino>(this.almacenadoras);
           console.log(this.almacenadoras);
+          this.dataSource2.paginator = this.paginator;   
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.listarNumeroPagina = response.numberOfElements;
@@ -163,9 +171,10 @@ export class DestinosComponent implements OnInit {
         console.log(response)
         this.listarAlmacenadorasParaTabla();
         if (response.code == 0) {
+          this.snackBar.open('Agregado exitosamente','',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
@@ -184,9 +193,10 @@ export class DestinosComponent implements OnInit {
         console.log(response);
         this.listarAlmacenadorasParaTabla();
         if (response.code == 0) {
+          this.snackBar.open('Actualizado exitosamente','',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
@@ -206,8 +216,10 @@ export class DestinosComponent implements OnInit {
         if (response.code == 0) {
           this.almacenadoraEditable = response;
           console.log(this.almacenadoraEditable)
+          this.snackBar.open('Eliminado exitosamente','',{duration: 3000});
           this.status = 'ok';
         } else {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
         }
       }, error => {

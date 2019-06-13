@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { Instancia } from 'src/app/models/instancia.model';
 import { InstanciaService } from 'src/app/services/instancia.service';
 
@@ -23,11 +24,11 @@ export class InstanciaComponent implements OnInit {
   public cantidadActual: number;
   public instanciaModel: Instancia;
   public instanciaEditable: Instancia;
-  public instanciaSeleccionada: number[];
+  public instanciaSeleccionada: string[];
 
   public dataSource2;
 
-  constructor(public dialog: MatDialog, private _instanciaService: InstanciaService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _instanciaService: InstanciaService) {
     this.limpiarVariables();
   }
 
@@ -50,6 +51,7 @@ export class InstanciaComponent implements OnInit {
         console.log(result);
         console.table(this.instanciaModel);
         this.agregar();
+        
       }
     });
   }
@@ -69,6 +71,7 @@ export class InstanciaComponent implements OnInit {
         console.log(result);
         console.table(this.instanciaEditable);
         this.editar();
+        this.limpiarVariables()
       }
     });
   }
@@ -86,6 +89,7 @@ export class InstanciaComponent implements OnInit {
         this.instanciaEditable.descripcion = result.descripcion;
         console.log(result);
         console.table(this.instanciaEditable);
+
       }
     });
   }
@@ -104,6 +108,7 @@ export class InstanciaComponent implements OnInit {
         console.log(result);
         console.table(this.instanciaEditable);
         this.eliminar(this.instanciaSeleccionada[0]);
+        this.limpiarVariables()
       }
     });
   }
@@ -113,8 +118,8 @@ export class InstanciaComponent implements OnInit {
   }
 
   limpiarVariables() {
-    this.instanciaEditable = new Instancia(0, 0, '', '', '1', true);
-    this.instanciaModel = new Instancia(0, 0, '', '', '1', true);
+    this.instanciaEditable = new Instancia(0, '', '', '', '1', true);
+    this.instanciaModel = new Instancia(0, '', '', '', '1', true);
   }
 
   siguientePagina(){
@@ -175,20 +180,22 @@ export class InstanciaComponent implements OnInit {
   }
 
   agregar() {
-    this._instanciaService.crearInstancia(this.instanciaModel).subscribe(
+    this._instanciaService.crearInstancia(this.instanciaModel).subscribe(      
       response => {
         console.log(response)
         this.listarInstanciasParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
-      }, error => {
+      }, error => {        
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          console.log(this.instanciaModel)
+          this.snackBar.open(errorMessage.description,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -201,15 +208,16 @@ export class InstanciaComponent implements OnInit {
         console.log(response);
         this.listarInstanciasParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -220,11 +228,14 @@ export class InstanciaComponent implements OnInit {
     if(this.instanciaSeleccionada == undefined) return;
     this._instanciaService.eliminarInstancia(id).subscribe(
       response => {
+        this.listarInstanciasParaTabla()
         if (response.code == 0) {
           this.instanciaEditable = response;
           console.log(this.instanciaEditable)
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
         } else {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
         }
       }, error => {
@@ -255,7 +266,7 @@ export class InstanciaComponent implements OnInit {
     if (this.instanciaSeleccionada[0]) {
       this.setInstancia(this.instanciaSeleccionada[0]);
     }
-    //    console.table(this.selection.selected)
+    
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
@@ -287,18 +298,12 @@ export class CrearInstancia {
   constructor(
     public dialogRef: MatDialogRef<CrearInstancia>,
     @Inject(MAT_DIALOG_DATA) public data: Instancia) {
-    this.instanciaModel = new Instancia(0, 0, '', '', '1', true);
+    this.instanciaModel = new Instancia(0, '', '', '', '1', true);
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
-
-  agregarAlmacenadora() {
-
-  }
-
-
 }
 
 @Component({

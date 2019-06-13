@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { OrigenFondos } from 'src/app/models/origen-fondos.model';
 import { OrigenFondosService } from 'src/app/services/origen-fondos.service';
 
@@ -16,7 +17,7 @@ export class OrigenFondosComponent implements OnInit {
   
   public status: string;
   public numeroPagina: number = 0;
-  public numeroItems: number = 50;
+  public numeroItems: number = 5;
   public primeraPagina: boolean;
   public ultimaPagina: boolean;
   public listarNumeroPagina: number = 0;
@@ -27,7 +28,7 @@ export class OrigenFondosComponent implements OnInit {
 
   public dataSource2;
 
-  constructor(public dialog: MatDialog, private _almacenadoraService: OrigenFondosService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _almacenadoraService: OrigenFondosService) {
     this.limpiarVariables();
   }
 
@@ -45,6 +46,7 @@ export class OrigenFondosComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result != undefined) {
+        this.almacenadoraModel.abreviatura = result.abreviatura;
         this.almacenadoraModel.codigo = result.codigo;
         this.almacenadoraModel.descripcion = result.descripcion;
         console.log(result);
@@ -163,15 +165,18 @@ export class OrigenFondosComponent implements OnInit {
         console.log(response)
         this.listarAlmacenadorasParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
-        } else {
-          alert(response.description);
+          this.limpiarVariables()
+        } else {          
+          this.snackBar.open(response.description,'',{duration: 3000});
+          this.limpiarVariables()
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -184,15 +189,17 @@ export class OrigenFondosComponent implements OnInit {
         console.log(response);
         this.listarAlmacenadorasParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarVariables()
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -203,12 +210,17 @@ export class OrigenFondosComponent implements OnInit {
     if(this.almacenadoraSeleccionada == undefined) return;
     this._almacenadoraService.eliminarAlmacenadora(id).subscribe(
       response => {
+        this.listarAlmacenadorasParaTabla()
         if (response.code == 0) {
           this.almacenadoraEditable = response;
           console.log(this.almacenadoraEditable)
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarVariables()
         } else {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
+          this.limpiarVariables()
         }
       }, error => {
         let errorMessage = <any>error;

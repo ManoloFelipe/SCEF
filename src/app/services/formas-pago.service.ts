@@ -17,20 +17,20 @@ export class FormasPagoService {
     return this._http.get(this.url + 'formaDePago/listPage?page='+numeroPagina+'&size='+numeroItems+'&sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers});
   }
 
-  listarAlmacenadora(id):Observable<any>{
+  listarFormasPago(id):Observable<any>{
     return this._http.get(this.url + 'formaDePago/read?empresa=1&codigo='+id);
   }
 
-  eliminarAlmacenadora(id):Observable<any>{
+  eliminarFormasPago(id):Observable<any>{
     return this._http.delete(this.url + 'formaDePago/delete?empresa=1&codigo='+id);
   }
 
-  actualizarAlmacenadora(formasPago: FormasPago):Observable<any>{
+  actualizarFormasPago(formasPago: FormasPago):Observable<any>{
     var params = JSON.stringify(formasPago)
     return this._http.put(this.url + 'formaDePago/update', params, {headers: this.headers});
   }
 
-  crearAlmacenadora(formasPago: FormasPago):Observable<any>{
+  crearFormasPago(formasPago: FormasPago):Observable<any>{
     var params = JSON.stringify(formasPago)
     return this._http.post(this.url + 'formaDePago/create', params, {headers: this.headers});
   }

@@ -6,8 +6,10 @@ matRipple
 [matRippleRadius]="35"
 [matRippleColor]="color">
 
-<!-- <mat-toolbar style="cursor:pointer;" onClick="history.back()" class="encabezado" class="color" >Dias Cobros Adicionales</mat-toolbar> -->
-<div class="example-form"  style="text-align: center">
+<mat-card class="centro">
+  <mat-card-title>Cobros Adicionales</mat-card-title>
+</mat-card>
+<div class="example-form">
   <mat-form-field appearance="outline">
     <mat-label>Buscar</mat-label>
     <input matInput placeholder="Ingrese el codigo" (keyup)="applyFilter($event.target.value)">    
@@ -16,7 +18,7 @@ matRipple
     <button mat-icon-button>
       <mat-icon matSuffix>search</mat-icon>
     </button>                 
-  </div>  
+  </div>
   <br>
   <br>
 
@@ -57,6 +59,7 @@ matRipple
       (click)="selection.toggle(row)">
   </tr>
 </table>
+<mat-paginator [pageSizeOptions] = "[5, 10, 20]"  showFirstLastButtons > </mat-paginator> 
   <br>
   <br>
   <div class="centro">

@@ -1,11 +1,13 @@
-.form {
-    max-width: auto;
-    align-self: auto;
-    text-align: center;
-  }
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center
+}
   table {
-    width: 40%;
-    margin-left: 30%
+    margin: 0 auto;
+    width: 80%;
 
   }
   .button{
@@ -21,4 +23,8 @@
 
 .encabezado{
   background: #273746
+}
+
+.centro{
+  text-align: center;
 }

@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { Aseguradora } from 'src/app/models/aseguradora.model'
 import { AseguradoraService } from 'src/app/services/aseguradora.service'
 import { from } from 'rxjs';
@@ -18,7 +20,7 @@ export class AseguradorasComponent implements OnInit {
   public aseguradoras: Aseguradora[];
   public status: string;
   public numeroPagina: number = 0;
-  public numeroItems: number = 100;
+  public numeroItems: number = 5;
   public primeraPagina: boolean;
   public ultimaPagina: boolean;
   public cantidadActual: number;
@@ -29,12 +31,12 @@ export class AseguradorasComponent implements OnInit {
   public dataSource2;
 
 
-  constructor(public dialog: MatDialog, private _aseguradoraService: AseguradoraService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _aseguradoraService: AseguradoraService) {
     this.limpiarVariables();
   }
 
   applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource2.filter = filterValue.trim().toLowerCase();
   }
 
   openDialog(): void {
@@ -51,6 +53,7 @@ export class AseguradorasComponent implements OnInit {
         this.aseguradoraModel.descripcion = result.descripcion;
         console.table(this.aseguradoraModel);
         this.agregar();
+        this.limpiarVariables();
       }
     });
   }
@@ -69,25 +72,7 @@ export class AseguradorasComponent implements OnInit {
         console.log(result);
         console.table(this.aseguradoraEditable);
         this.editar();
-        // this._aseguradoraService.actualizarAseguradora(this.aseguradoraEditable).subscribe(
-        //   response => {
-        //     console.log(response);
-        //     this.listarAseguradoraParaTabla();
-        //     if (response.code == 0) {
-        //       this.status = 'ok';
-        //     } else {
-        //       alert(response.description);
-        //     }
-        //   },
-        //   error => {
-        //     let errorMessage = <any>error;
-        //     console.log(errorMessage);
-        //     if (errorMessage != null) {
-        //       alert(error.description);
-        //       this.status = 'error';
-        //     }
-        //   }
-        // )
+        this.limpiarVariables();
       }
     });
   }
@@ -105,11 +90,14 @@ export class AseguradorasComponent implements OnInit {
         this.aseguradoraEditable.descripcion = result.descripcion;
         console.log(result);
         console.table(this.aseguradoraEditable);
-        this.eliminar(this.aseguradoraSeleccionada[0]);
+        this.eliminar(this.aseguradoraSeleccionada[0]);       
+        this.limpiarVariables();        
       }
     });
   }
 
+  @ViewChild (MatPaginator) paginator: MatPaginator;
+  
   ngOnInit() {
     this.listarAseguradoraParaTabla();
   }
@@ -126,6 +114,7 @@ export class AseguradorasComponent implements OnInit {
           this.aseguradoras = response.content;
           this.dataSource2 = new MatTableDataSource<Aseguradora>(this.aseguradoras);
           console.log(this.aseguradoras);
+          this.dataSource2.paginator = this.paginator;
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.cantidadActual = response.numberOfElements;
@@ -153,7 +142,6 @@ export class AseguradorasComponent implements OnInit {
           this.status = 'ok';
         } else {
           this.status = 'error';
-          alert('error');
         }
       },
       error => {
@@ -172,9 +160,10 @@ export class AseguradorasComponent implements OnInit {
         console.log(response);
         this.listarAseguradoraParaTabla();
         if (response.code == 0) {
+          this.snackBar.open('Agregado exitosamente','',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       },
       error => {
@@ -194,9 +183,10 @@ export class AseguradorasComponent implements OnInit {
         console.log(response);
         this.listarAseguradoraParaTabla();
         if(response.code ==0){
+          this.snackBar.open('Actualizado exitosamente','',{duration: 3000});
           this.status = 'ok';
         }else{
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
 
       },
@@ -212,17 +202,18 @@ export class AseguradorasComponent implements OnInit {
   }
 
   eliminar(id){
-    if(this.aseguradoraSeleccionada == undefined) return
+    if(this.aseguradoraSeleccionada[0] == undefined) return
     this._aseguradoraService.eliminarAseguradora(id).subscribe(
       response =>{
         if(response.code ==0){
           this.aseguradoraEditable =response;
           console.log(this.aseguradoraEditable)
           this.listarAseguradoraParaTabla();
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
         }else{
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
-
         }
       },
       error =>{

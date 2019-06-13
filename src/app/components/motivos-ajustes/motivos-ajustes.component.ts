@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { MotivoAjuste } from 'src/app/models/motivo-ajuste.model';
 import { MotivosAjustesService } from 'src/app/services/motivo-ajuste.service';
 
@@ -15,7 +16,6 @@ import { MotivosAjustesService } from 'src/app/services/motivo-ajuste.service';
 export class MotivosAjustesComponent implements OnInit {
   
 //VARIABLES CHECKBOX
-  checked = false;
   checked2 = false;
   checked3 = false;
  public CheckAfectaSaldoCapital: string;
@@ -29,7 +29,7 @@ export class MotivosAjustesComponent implements OnInit {
   public motivoAjusteSeleccionado: number[];
   public status: string;
   public numeroPagina: number = 0;
-  public numeroItems: number = 7;
+  public numeroItems: number = 5;
   public primeraPagina: boolean;
   public ultimaPagina: boolean;
   public listarNumeroPagina: number = 0;
@@ -68,13 +68,13 @@ export class MotivosAjustesComponent implements OnInit {
 
  
 
-  constructor(public dialog: MatDialog, private _motivoAjusteService: MotivosAjustesService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _motivoAjusteService: MotivosAjustesService) {
     this.limpiarVariables();
     this.limpiarChecks();
   }
 
   applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource2.filter = filterValue.trim().toLowerCase();
   }
 
   limpiarVariables() {
@@ -106,9 +106,9 @@ export class MotivosAjustesComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogAgregarMotivoAjuste, {
       width: '500px', 
-      data: {afectaSaldoCapital: this.motivoAjusteModel.afectaSaldoCapital,
-            afectaSaldoInteres: this.motivoAjusteModel.afectaSaldoInteres,
-            afectaSaldoMora: this.motivoAjusteModel.afectaSaldoMora,
+      data: {afectaSaldoCapital: this.CheckAfectaSaldoCapital,
+            afectaSaldoInteres: this.CheckAfectaSaldoInteres,
+            afectaSaldoMora: this.CheckAfectaSaldoMora,
             codigo: this.motivoAjusteModel.codigo,
             descripcion: this.motivoAjusteModel.descripcion,
             descripcion2: this.motivoAjusteModel.descripcion2,
@@ -119,35 +119,30 @@ export class MotivosAjustesComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result != undefined) {
-        console.log("k:"+result.afectaSaldoMora)
+        console.log("k:"+result.afectaSaldoCapital)
 
-        if (result.afectaSaldoCapital == true) {
+        if (result.afectaSaldoCapital == 'S') {
           // this.CheckAfectaSaldoCapital = 'S'
-          result.CheckAfectaSaldoCapital = 'S'
+          result.AfectaSaldoCapital = 'S'
+        }else{
+          result.AfectaSaldoCapital = 'N'
         }
-        if (result.afectaSaldoInteres == true) {
+
+        if (result.afectaSaldoInteres == 'S') {
           // this.CheckAfectaSaldoInteres = 'S'
           result.afectaSaldoInteres = 'S'
-        }
-
-        if (result.afectaSaldoMora == true) {
-          // this.CheckAfectaSaldoMora = 'S'
-          result.afectaSaldoMora = 'S'
-        }
-
-        if (result.afectaSaldoCapital == false) {
-          // result.CheckAfectaSaldoCapital = 'N'
-          result.CheckAfectaSaldoCapital = 'N'
-        }
-        if (result.afectaSaldoInteres == false) {
+        }else{
           result.afectaSaldoInteres = 'N'
         }
 
-        if (result.afectaSaldoMora == false) {
+        if (result.afectaSaldoMora == 'S') {
+          // this.CheckAfectaSaldoMora = 'S'
+          result.afectaSaldoMora = 'S'
+        }else{
           result.afectaSaldoMora = 'N'
-        }
+        }        
         
-        this.motivoAjusteModel.afectaSaldoCapital  = result.CheckAfectaSaldoCapital;
+        this.motivoAjusteModel.afectaSaldoCapital  = result.afectaSaldoCapital;
         this.motivoAjusteModel.afectaSaldoInteres = result.afectaSaldoInteres;
         this.motivoAjusteModel.afectaSaldoMora = result.afectaSaldoMora;
         this.motivoAjusteModel.codigo = result.codigo;
@@ -163,7 +158,7 @@ export class MotivosAjustesComponent implements OnInit {
   }
 
   limpiarChecks(){
-    this.checked = false;
+
     this.checked2 = false;
     this.checked3 = false;
     
@@ -201,7 +196,7 @@ export class MotivosAjustesComponent implements OnInit {
 
   openDialogEliminar(): void {
     const dialogRef = this.dialog.open(DialogEliminarMotivoAjuste, {
-      width: '500px', 
+      width: '600px', 
       data: {afectaSaldoCapital: this.motivoAjusteEditable.afectaSaldoCapital,
         afectaSaldoInteres: this.motivoAjusteEditable.afectaSaldoInteres,
         afectaSaldoMora: this.motivoAjusteEditable.afectaSaldoMora,
@@ -235,15 +230,18 @@ export class MotivosAjustesComponent implements OnInit {
         console.log(response);
         this.listarMotivosAjustesParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarVariables();          
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});          
+          this.limpiarVariables()
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -255,18 +253,19 @@ export class MotivosAjustesComponent implements OnInit {
       response => {
         console.log(response)
         this.listarMotivosAjustesParaTabla();
-        this.limpiarVariables();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
-          
+          this.limpiarVariables();
+          this.limpiarChecks()
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -281,8 +280,12 @@ export class MotivosAjustesComponent implements OnInit {
           this.listarMotivosAjustesParaTabla();
           this.motivoAjusteEditable = response;
           console.log(this.motivoAjusteEditable)
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarChecks();
+          this.limpiarVariables();
         } else {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
         }
       }, error => {

@@ -3,6 +3,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormasPago } from 'src/app/models/formas-pago.model';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { FormasPagoService } from 'src/app/services/formas-pago.service';
 
 @Component({
@@ -12,7 +13,7 @@ import { FormasPagoService } from 'src/app/services/formas-pago.service';
   providers:[FormasPagoService]
 })
 export class FormasPagoComponent implements OnInit {
-  public almacenadoras: FormasPago[];
+  public formasdepago: FormasPago[];
   
   public status: string;
   public numeroPagina: number = 0;
@@ -21,13 +22,13 @@ export class FormasPagoComponent implements OnInit {
   public ultimaPagina: boolean;
   public listarNumeroPagina: number = 0;
   public cantidadActual: number;
-  public almacenadoraModel: FormasPago;
-  public almacenadoraEditable: FormasPago;
-  public almacenadoraSeleccionada: number[];
+  public formasModel: FormasPago;
+  public formasEditable: FormasPago;
+  public formasSeleccionada: number[];
 
   public dataSource2;
 
-  constructor(public dialog: MatDialog, private _almacenadoraService: FormasPagoService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _formasService: FormasPagoService) {
     this.limpiarVariables();
   }
 
@@ -39,17 +40,18 @@ export class FormasPagoComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogFormas, {
       width: '500px',
-      data: { codigo: this.almacenadoraModel.codigo, descripcion: this.almacenadoraModel.descripcion }
+      data: { codigo: this.formasModel.codigo, descripcion: this.formasModel.descripcion }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result != undefined) {
-        this.almacenadoraModel.codigo = result.codigo;
-        this.almacenadoraModel.descripcion = result.descripcion;
+        this.formasModel.codigo = result.codigo;
+        this.formasModel.descripcion = result.descripcion;
         console.log(result);
-        console.table(this.almacenadoraModel);
+        console.table(this.formasModel);
         this.agregar();
+        this.limpiarVariables()
       }
     });
   }
@@ -58,17 +60,18 @@ export class FormasPagoComponent implements OnInit {
   openDialogEdit(): void {
     const dialogRef = this.dialog.open(DialogActualizarFormas, {
       width: '500px',
-      data: { codigo: this.almacenadoraEditable.codigo, descripcion: this.almacenadoraEditable.descripcion }
+      data: { codigo: this.formasEditable.codigo, descripcion: this.formasEditable.descripcion }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result != undefined) {
-        this.almacenadoraEditable.codigo = result.codigo;
-        this.almacenadoraEditable.descripcion = result.descripcion;
+        this.formasEditable.codigo = result.codigo;
+        this.formasEditable.descripcion = result.descripcion;
         console.log(result);
-        console.table(this.almacenadoraEditable);
+        console.table(this.formasEditable);
         this.editar();
+        this.limpiarVariables()
       }
     });
   }
@@ -76,17 +79,18 @@ export class FormasPagoComponent implements OnInit {
   openDialogDelete(): void {
     const dialogRef = this.dialog.open(DialogEliminarFormas, {
       width: '500px',
-      data: { codigo: this.almacenadoraEditable.codigo, descripcion: this.almacenadoraEditable.descripcion }
+      data: { codigo: this.formasEditable.codigo, descripcion: this.formasEditable.descripcion }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result != undefined) {
-        this.almacenadoraEditable.codigo = result.codigo;
-        this.almacenadoraEditable.descripcion = result.descripcion;
+        this.formasEditable.codigo = result.codigo;
+        this.formasEditable.descripcion = result.descripcion;
         console.log(result);
-        console.table(this.almacenadoraEditable);
-        this.eliminar(this.almacenadoraSeleccionada[0]);
+        console.table(this.formasEditable);
+        this.eliminar(this.formasSeleccionada[0]);
+        this.limpiarVariables()
       }
     });
   }
@@ -96,8 +100,8 @@ export class FormasPagoComponent implements OnInit {
   }
 
   limpiarVariables() {
-    this.almacenadoraEditable = new FormasPago(0, 0, '', '', '1', true);
-    this.almacenadoraModel = new FormasPago(0, 0, '', '', '1', true);
+    this.formasEditable = new FormasPago(0, 0, '', '', '1', true);
+    this.formasModel = new FormasPago(0, 0, '', '', '1', true);
   }
 
   siguientePagina(){
@@ -115,12 +119,12 @@ export class FormasPagoComponent implements OnInit {
   }
 
   listarAlmacenadorasParaTabla() {
-    this._almacenadoraService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+    this._formasService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
       response => {
         if (response.content) {
-          this.almacenadoras = response.content;
-          this.dataSource2 = new MatTableDataSource<FormasPago>(this.almacenadoras);
-          console.log(this.almacenadoras);
+          this.formasdepago = response.content;
+          this.dataSource2 = new MatTableDataSource<FormasPago>(this.formasdepago);
+          console.log(this.formasdepago);
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.listarNumeroPagina = response.numberOfElements;
@@ -137,12 +141,12 @@ export class FormasPagoComponent implements OnInit {
   }
 
   setAlmacenadora(id) {
-    if(this.almacenadoraSeleccionada == undefined) return;
-    this._almacenadoraService.listarAlmacenadora(id).subscribe(
+    if(this.formasSeleccionada == undefined) return;
+    this._formasService.listarFormasPago(id).subscribe(
       response => {
         if (response.code == 0) {
-          this.almacenadoraEditable = response;
-          console.log(this.almacenadoraEditable)
+          this.formasEditable = response;
+          console.log(this.formasEditable)
           this.status = 'ok';
         } else {
           this.status = 'error';
@@ -158,14 +162,15 @@ export class FormasPagoComponent implements OnInit {
   }
 
   agregar() {
-    this._almacenadoraService.crearAlmacenadora(this.almacenadoraModel).subscribe(
+    this._formasService.crearFormasPago(this.formasModel).subscribe(
       response => {
         console.log(response)
         this.listarAlmacenadorasParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
@@ -179,14 +184,15 @@ export class FormasPagoComponent implements OnInit {
   }
 
   editar() {
-    this._almacenadoraService.actualizarAlmacenadora(this.almacenadoraEditable).subscribe(
+    this._formasService.actualizarFormasPago(this.formasEditable).subscribe(
       response => {
         console.log(response);
         this.listarAlmacenadorasParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
@@ -200,14 +206,16 @@ export class FormasPagoComponent implements OnInit {
   }
 
   eliminar(id){
-    if(this.almacenadoraSeleccionada == undefined) return;
-    this._almacenadoraService.eliminarAlmacenadora(id).subscribe(
+    if(this.formasSeleccionada == undefined) return;
+    this._formasService.eliminarFormasPago(id).subscribe(
       response => {
         if (response.code == 0) {
-          this.almacenadoraEditable = response;
-          console.log(this.almacenadoraEditable)
+          this.formasEditable = response;
+          this.listarAlmacenadorasParaTabla()
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
         } else {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
         }
       }, error => {
@@ -222,7 +230,7 @@ export class FormasPagoComponent implements OnInit {
   }
 
   displayedColumns: string[] = ['select', 'codigo', 'descripcion'];
-  dataSource = new MatTableDataSource<FormasPago>(this.almacenadoras);
+  dataSource = new MatTableDataSource<FormasPago>(this.formasdepago);
   selection = new SelectionModel<FormasPago>(false, []);
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -233,10 +241,10 @@ export class FormasPagoComponent implements OnInit {
   }
 
   imprimir() {
-    this.almacenadoraSeleccionada = this.selection.selected.map(row => row.codigo);
-    console.log(this.almacenadoraSeleccionada[0]);
-    if (this.almacenadoraSeleccionada[0]) {
-      this.setAlmacenadora(this.almacenadoraSeleccionada[0]);
+    this.formasSeleccionada = this.selection.selected.map(row => row.codigo);
+    console.log(this.formasSeleccionada[0]);
+    if (this.formasSeleccionada[0]) {
+      this.setAlmacenadora(this.formasSeleccionada[0]);
     }
     
   }

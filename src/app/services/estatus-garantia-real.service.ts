@@ -14,8 +14,8 @@ export class EstatusGarantiaRealService {
     this.url = GLOBAL.url
    }
 
-  listarPagina(numeroPagina, numeroItems):Observable<any> {
-    return this._http.get(this.url + 'statusGarantiaReal/listPage?page='+numeroPagina+'&size='+numeroItems,{headers: this.headers});
+  listarPagina():Observable<any> {
+    return this._http.get(this.url + 'statusGarantiaReal/listPage',{headers: this.headers});
   }
 
   listarEstatusGarantia(id):Observable<any>{

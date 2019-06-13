@@ -6,8 +6,8 @@
 <td><h4>Codigo:  </h4></td>
 <td>
 <mat-form-field>
-    <input matInput placeholder="Ingrese el Codigo" [(ngModel)]="data.codigo"
-            [ngModelOptions]="{standalone: true}" readonly>
+    <input matInput placeholder="Introduce el Codigo" [(ngModel)]="data.codigo"
+        [ngModelOptions]="{standalone: true}">
     </mat-form-field>
 </td>
 </tr>
@@ -15,31 +15,39 @@
 <td><h4>Descripcion:  </h4></td>
 <td>
 <mat-form-field>
-    <input  matInput placeholder="Ingrese la Descripcion" [(ngModel)]="data.descripcion"
+    <input matInput placeholder="Introduce el Descripcion" [(ngModel)]="data.descripcion"
     [ngModelOptions]="{standalone: true}">
 </mat-form-field>
 </td>
 </tr>
 <tr>
+<td><h4>Afecto Saldo Capital:  </h4></td>
 <td>
-    <h4>Afecta Saldo Capita:</h4></td>
-<td>
-        <mat-checkbox [(ngModel)]="data.afectaSaldoCapital"
-        [ngModelOptions]="{standalone: true}">Si</mat-checkbox>
+    <mat-radio-group aria-labelledby="AfectaSaldoCapital" [(ngModel)]="data.afectaSaldoCapital" [ngModelOptions]="{standalone: true}">
+        <mat-radio-button style="margin-left: 5px" value="S"> SI </mat-radio-button>      
+        <mat-radio-button style="margin-left: 5px" value="N"> NO </mat-radio-button>
+      </mat-radio-group>
+      
+        
 </td>
 </tr>
 <tr>
 <td><h4>Afecto Salto Interés:  </h4></td>
 <td>
-    <mat-checkbox [(ngModel)]="data.afectaSaldoInteres"
-    [ngModelOptions]="{standalone: true}">Si</mat-checkbox>
+        <mat-radio-group aria-labelledby="AfectaSaldoInteres" [(ngModel)]="data.afectaSaldoInteres" [ngModelOptions]="{standalone: true}">
+            <mat-radio-button style="margin-left: 5px" value="S"> SI </mat-radio-button>      
+            <mat-radio-button style="margin-left: 5px" value="N"> NO </mat-radio-button>
+        </mat-radio-group>    
+        
 </td>
 </tr>
 <tr>
 <td><h4>Afecto Saldo Mora:  </h4></td>
 <td>
-    <mat-checkbox [(ngModel)]="data.afectaSaldoMora"
-    [ngModelOptions]="{standalone: true}">Si</mat-checkbox>
+    <mat-radio-group aria-labelledby="AfectaSaldoMora" [(ngModel)]="data.afectaSaldoMora" [ngModelOptions]="{standalone: true}">
+        <mat-radio-button style="margin-left: 5px" value="S"> SI </mat-radio-button>      
+        <mat-radio-button style="margin-left: 5px" value="N"> NO </mat-radio-button>
+    </mat-radio-group>        
 </td>
 </tr>       
 

@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import {MedioContacto} from 'src/app/models/medioContacto.model'
 import {MediosContactoService} from 'src/app/services/medios-contacto.service'  
 
@@ -29,7 +30,7 @@ export class MediosContactoComponent implements OnInit {
 
   
 
-  constructor(public dialog: MatDialog, private _medioService:MediosContactoService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _medioService:MediosContactoService) {
     this.limpiarVariables();
   }
 
@@ -58,7 +59,7 @@ export class MediosContactoComponent implements OnInit {
 
   openDialogEdit(): void {
     const dialogRef = this.dialog.open(DialogActualizarMedio, {
-      width: '500px',
+      width: '400px',
       data: { codigo: this.medioEditable.codigo, descripcion: this.medioEditable.descripcion }
     });
 
@@ -76,7 +77,7 @@ export class MediosContactoComponent implements OnInit {
 
   openDialogEliminar(): void {
     const dialogRef = this.dialog.open(DialogEliminarContacto, {
-      width: '400px',
+      width: '500px',
       data: {codigo: this.medioEditable.codigo, descripcion: this.medioEditable.descripcion}
     });
 
@@ -151,16 +152,18 @@ export class MediosContactoComponent implements OnInit {
         console.log(response);
         this.listarMedioContactoParaTabla();
         if(response.code ==0){
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarVariables()
         }else{
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       },
       error=>{
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -173,16 +176,18 @@ export class MediosContactoComponent implements OnInit {
         console.log(response);
         this.listarMedioContactoParaTabla();
         if(response.code ==0){
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status='ok';
+          this.limpiarVariables()
         }else{
-          alert(response.description)
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       },
       error=>{
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -197,8 +202,11 @@ export class MediosContactoComponent implements OnInit {
           this.medioEditable= response;
           console.log(this.medioEditable);
           this.listarMedioContactoParaTabla();
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status='ok';
+          this.limpiarVariables()
         }else{
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status ='error';
         }
       },
@@ -206,6 +214,7 @@ export class MediosContactoComponent implements OnInit {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }

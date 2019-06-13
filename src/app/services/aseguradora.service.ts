@@ -15,7 +15,7 @@ export class AseguradoraService {
    }
 
    listarPagina(numeroPagina, numeroItems):Observable<any> {
-    return this._http.get(this.url + 'aseguradora/listPage?page='+numeroPagina+'&size='+numeroItems+'&sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers});
+    return this._http.get(this.url + 'aseguradora/listPage?sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers});
   }
 
   listarAseguradora(id):Observable<any>{

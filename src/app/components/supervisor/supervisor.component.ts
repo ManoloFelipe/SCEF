@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { Supervisor } from 'src/app/models/supervisor.model';
 import { SupervisorService } from 'src/app/services/supervisor.service';
 
@@ -27,7 +28,7 @@ export class SupervisorComponent implements OnInit {
 
   public dataSource2;
 
-  constructor(public dialog: MatDialog, private _supervisorService: SupervisorService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _supervisorService: SupervisorService) {
     this.limpiarVariables();
   }
 
@@ -39,14 +40,15 @@ export class SupervisorComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(CrearSupervisor, {
       width: '500px',
-      data: { codigo: this.supervisorModel.codigo, descripcion: this.supervisorModel.descripcion }
+      data: { codigo: this.supervisorModel.codigo, descripcion: this.supervisorModel.descripcion, numeroRegistro: this.supervisorModel.numeroRegistro }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result != undefined) {
+      if (result != undefined) {        
         this.supervisorModel.codigo = result.codigo;
         this.supervisorModel.descripcion = result.descripcion;
+        this.supervisorModel.numeroRegistro = result.numeroRegistro;
         console.log(result);
         console.table(this.supervisorModel);
         this.agregar();
@@ -58,7 +60,7 @@ export class SupervisorComponent implements OnInit {
   openDialogEdit(): void {
     const dialogRef = this.dialog.open(ActualizarSupervisor, {
       width: '500px',
-      data: { codigo: this.supervisorEditable.codigo, descripcion: this.supervisorEditable.descripcion }
+      data: { codigo: this.supervisorEditable.codigo, descripcion: this.supervisorEditable.descripcion, numeroRegistro: this.supervisorEditable.numeroRegistro }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -66,6 +68,7 @@ export class SupervisorComponent implements OnInit {
       if (result != undefined) {
         this.supervisorEditable.codigo = result.codigo;
         this.supervisorEditable.descripcion = result.descripcion;
+        this.supervisorEditable.numeroRegistro = result.numeroRegistro;
         console.log(result);
         console.table(this.supervisorEditable);
         this.editar();
@@ -160,7 +163,7 @@ export class SupervisorComponent implements OnInit {
         if (response.code == 0) {
           this.supervisorEditable = response;
           console.log(this.supervisorEditable)
-          this.status = 'ok';
+          this.status = 'ok';          
         } else {
           this.status = 'error';
         }
@@ -180,15 +183,18 @@ export class SupervisorComponent implements OnInit {
         console.log(response)
         this.listarSupervisoresParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarVariables()
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
+          this.limpiarVariables()
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -201,15 +207,18 @@ export class SupervisorComponent implements OnInit {
         console.log(response);
         this.listarSupervisoresParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarVariables()
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
+          this.limpiarVariables()
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -220,17 +229,23 @@ export class SupervisorComponent implements OnInit {
     if(this.supervisorSeleccionado == undefined) return;
     this._supervisorService.eliminarSupervisor(id).subscribe(
       response => {
+        this.listarSupervisoresParaTabla()
         if (response.code == 0) {
           this.supervisorEditable = response;
           console.log(this.supervisorEditable)
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
+          this.limpiarVariables()
         } else {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
+          this.limpiarVariables()
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
+          this.snackBar.open(errorMessage,'',{duration: 3000});
           this.status = 'error';
         }
       }

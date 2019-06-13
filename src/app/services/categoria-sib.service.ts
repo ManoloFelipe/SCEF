@@ -13,8 +13,8 @@ export class CategoriaSibService {
     this.url = GLOBAL.url;
   }
 
-  listarPagina(numeroPagina, numeroItems):Observable<any> {
-    return this._http.get(this.url + 'categoria/listPage?page='+numeroPagina+'&size='+numeroItems+'&sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers});
+  listarPagina():Observable<any> {
+    return this._http.get(this.url + 'categoria/listPage?sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers});
   }
 
   listarCategoria(id):Observable<any>{

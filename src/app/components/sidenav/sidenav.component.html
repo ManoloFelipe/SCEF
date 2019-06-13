@@ -11,8 +11,11 @@
         <div class="example-form">
             <mat-form-field style="width: 400px" appearance="fill">
                 <mat-label>BUSCADOR</mat-label>              
-                <input  matInput  (keyup)="applyFilter($event.target.value)">                                                                                     
+                <input  matInput  (keyup)="applyFilter($event.target.value)">                                               
             </mat-form-field>            
+            <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+              <mat-icon>close</mat-icon>
+            </button>                                                                                        
         </div>  
       
       <table mat-table [dataSource]="dataSource" style="margin-top: -80px; width: 400px">

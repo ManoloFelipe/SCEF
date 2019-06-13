@@ -2,6 +2,7 @@ import { Component, OnInit, Inject} from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import {LugarInversionService} from 'src/app/services/lugar-inversion.service'
 import {LugarInversion} from 'src/app/models/lugarInversion.model'
 
@@ -20,7 +21,7 @@ export class LugaresInversionComponent implements OnInit {
   public lugares : LugarInversion[];
   public status: string;
   public numeroPagina: number = 0;
-  public numeroItems: number = 125;
+  public numeroItems: number = 5;
   public primeraPagina: boolean;
   public ultimaPagina: boolean;
   public cantidadActual: number;
@@ -31,7 +32,7 @@ export class LugaresInversionComponent implements OnInit {
   public dataSource2;
 
 
-  constructor(public dialog: MatDialog, private _lugarService: LugarInversionService) { 
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _lugarService: LugarInversionService) { 
     this.limpiarVariables();
   }
 
@@ -156,16 +157,18 @@ export class LugaresInversionComponent implements OnInit {
         console.log(response);
         this.listarLugarInversionParaTabla();
         if(response.code == 0){
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status='ok';
+          this.limpiarVariables();
         }else{
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       },
       error=>{
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage.description,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -178,16 +181,18 @@ export class LugaresInversionComponent implements OnInit {
         console.log(response);
         this.listarLugarInversionParaTabla();
         if(response.code ==0){
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status='ok';
+          this.limpiarVariables();
         }else{
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       },
       error=>{
         let errorMessage = <any>error;
         console.log(errorMessage);
         if (errorMessage != null) {
-          alert(error.description);
+          this.snackBar.open(errorMessage.description,'',{duration: 3000});
           this.status = 'error';
         }
       }
@@ -202,8 +207,11 @@ export class LugaresInversionComponent implements OnInit {
           this.lugarEditable = response;
           console.log(this.lugarEditable);
           this.listarLugarInversionParaTabla();
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status='ok';
+          this.limpiarVariables();
         }else{
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status ='error';
         }
       },

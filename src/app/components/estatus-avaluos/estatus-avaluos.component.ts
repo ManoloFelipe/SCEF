@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { EstatusAvaluosService } from 'src/app/services/estatus-avaluos.service';
 import { EstatusAvaluos } from 'src/app/models/estatus-avaluos.model';
 
@@ -28,7 +30,7 @@ export class EstatusAvaluosComponent implements OnInit {
 
   public dataSource2;
   
-  constructor(public dialog: MatDialog, private _estatusAvaluosService: EstatusAvaluosService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _estatusAvaluosService: EstatusAvaluosService) {
     this.limpiarVariables()
   }
 
@@ -75,9 +77,10 @@ export class EstatusAvaluosComponent implements OnInit {
             console.log(response);
             this.listarEstatusAvaluosParaTabla();
             if (response.code == 0) {
+              this.snackBar.open('Actualizado exitosamente','',{duration: 3000});
               this.status = 'ok';
             } else {
-              alert(response.description);
+              this.snackBar.open(response.description,'',{duration: 3000});
             }
           }, error => {
             let errorMessage = <any>error;
@@ -88,6 +91,7 @@ export class EstatusAvaluosComponent implements OnInit {
             }
           }
         );
+        this.limpiarVariables()
       }
     });
   }
@@ -106,20 +110,24 @@ export class EstatusAvaluosComponent implements OnInit {
         console.log(result);
         console.table(this.estatusEditable);
         this.eliminar(this.estatusSeleccionado[0]);
+        this.limpiarVariables()
       }
     });
   }
+
+  @ViewChild (MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
     this.listarEstatusAvaluosParaTabla()
   }
 
   listarEstatusAvaluosParaTabla(){
-    this._estatusAvaluosService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+    this._estatusAvaluosService.listarPagina().subscribe(
       response=>{
         this.avaluos = response.content;
           this.dataSource2 = new MatTableDataSource<EstatusAvaluos>(this.avaluos);
           console.log(this.avaluos);
+          this.dataSource2.paginator = this.paginator;   
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.listarNumeroPagina = response.numberOfElements;
@@ -161,9 +169,10 @@ export class EstatusAvaluosComponent implements OnInit {
         console.log(response);
         this.listarEstatusAvaluosParaTabla()
         if(response.code == 0){
+          this.snackBar.open('Agregado exitosamente','',{duration: 3000});
           this.status = 'OK'
         }else{
-          alert(response.descripcion)
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       },error=>{
         let errorMessage = <any>error;
@@ -205,10 +214,11 @@ export class EstatusAvaluosComponent implements OnInit {
         if (response.code == 0) {          
           this.estatusEditable = response;
           console.log(this.estatusEditable)
+          this.snackBar.open('Eliminado exitosamente','',{duration: 3000});
           this.status = 'ok';
           this.listarEstatusAvaluosParaTabla();
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
         }
       }, error => {

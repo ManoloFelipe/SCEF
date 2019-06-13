@@ -1,5 +1,5 @@
 <mat-card class="centro">
-  <mat-card-title>Origen de fondos</mat-card-title>
+  <mat-card-title>Agregar Origen de fondos</mat-card-title>
 </mat-card>
 <br>
 <br>
@@ -19,6 +19,11 @@
       <br>
       <mat-form-field class="example-full-width">
         <input matInput placeholder="Introduce la descripcion" [(ngModel)]="data.descripcion"
+          [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="usuario" [(ngModel)]="data.usuario"
           [ngModelOptions]="{standalone: true}">
       </mat-form-field>
     </p>

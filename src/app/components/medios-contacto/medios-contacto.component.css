@@ -60,12 +60,6 @@ mat-card mat-card-title{
     margin-left: 40px;
     
 }
-  hr{
-      margin-top: 70px;
-      background: #D35400  ;
-      height: 1px;
-  }
-
   #atras{
       width: 40px;
       height: 40px;
@@ -74,10 +68,9 @@ mat-card mat-card-title{
   }
 
 
-  table {
-    width: 600px;
-    height: 10px;
-    margin-left: 400px;
+  .table {
+    margin: 0 auto;
+    width: 80%;
   }
   
   th.mat-sort-header-sorted {

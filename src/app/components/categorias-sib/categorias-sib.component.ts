@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import {Component, OnInit, Inject,ViewChild} from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { CategoriaSibService } from 'src/app/services/categoria-sib.service';
 import { CategoriaSib } from 'src/app/models/categoriaSib.model';
 
@@ -22,9 +24,10 @@ export class CategoriasSIBComponent implements OnInit {
   public categoriaModel: CategoriaSib;
   public categoriaEditable: CategoriaSib;
   public categoriaSeleccionada: string[];
+  
   public dataSource2;
 
-  constructor(public dialog: MatDialog, private _categoriaService: CategoriaSibService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _categoriaService: CategoriaSibService) {
     this.limpiarVariables();
   }
 
@@ -79,9 +82,12 @@ export class CategoriasSIBComponent implements OnInit {
         console.log(result);
         console.table(this.categoriaEditable);
         this.editar();
+        this.limpiarVariables();
       }
     });
   }
+
+  @ViewChild (MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
     this.listarCategoriasParaTabla()
@@ -98,15 +104,15 @@ export class CategoriasSIBComponent implements OnInit {
         console.log(response)
         this.listarCategoriasParaTabla();
         if (response.code == 0) {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';          
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
         console.log(errorMessage);
-        if (errorMessage != null) {
-          alert(error.description);
+        if (errorMessage != null) {          
           this.status = 'error';
         }
       }
@@ -119,9 +125,10 @@ export class CategoriasSIBComponent implements OnInit {
         console.log(response);
         this.listarCategoriasParaTabla();
         if(response.code ==0){
+          this.snackBar.open('Actualizado exitosamente','',{duration: 3000});
           this.status = 'ok';
         }else{
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
 
       },
@@ -137,15 +144,17 @@ export class CategoriasSIBComponent implements OnInit {
   }
 
   listarCategoriasParaTabla() {
-    this._categoriaService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+    this._categoriaService.listarPagina().subscribe(
       response => {
         if (response.content) {
           this.categorias = response.content;
           this.dataSource2 = new MatTableDataSource<CategoriaSib>(this.categorias);
           console.log(this.categorias);
+          this.dataSource2.paginator = this.paginator;    
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
-          this.cantidadActual = response.numberOfElements;
+          this.cantidadActual = response.numberOfElements;        
+   
           this.status = 'ok';
         }
       }, error => {
@@ -166,9 +175,11 @@ export class CategoriasSIBComponent implements OnInit {
         if (response.code == 0) {          
           this.categoriaEditable = response;
           console.table(this.categoriaEditable)
+          this.snackBar.open('Eliminado exitosamente','',{duration: 3000});
           this.listarCategoriasParaTabla()
           this.status = 'ok';
         } else {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
         }
       }, error => {
@@ -205,6 +216,7 @@ export class CategoriasSIBComponent implements OnInit {
   displayedColumns: string[] = ['select', 'codigo','descripcion'];
   dataSource = new MatTableDataSource<CategoriaSib>(this.categorias);
   selection = new SelectionModel<CategoriaSib>(false, []);
+
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {

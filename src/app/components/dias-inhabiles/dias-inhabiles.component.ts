@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { DiaInhabil } from 'src/app/models/dia-inhabil.model';
 import { DiaInhabilService } from 'src/app/services/dia-inhabil.service';
 
@@ -21,7 +22,7 @@ export class DiasInhabilesComponent implements OnInit {
   public diaInhabilSeleccionado: Date[];
   public status: string;
   public numeroPagina: number = 0;
-  public numeroItems: number = 7;
+  public numeroItems: number = 5;
   public primeraPagina: boolean;
   public ultimaPagina: boolean;
   public listarNumeroPagina: number = 0;
@@ -40,12 +41,12 @@ export class DiasInhabilesComponent implements OnInit {
   timeLeft: number;
   interval;
 
-  constructor(public dialog: MatDialog, private _diaInhabilService: DiaInhabilService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _diaInhabilService: DiaInhabilService) {
     this.limpiarVariables();
   }
 
   applyFilter(filterValue: string) {
-    this.dataSource2.filter = filterValue.trim().toLowerCase();
+    this.dataSource2.filter = filterValue.trim().toLowerCase(); 
   }
 
   limpiarVariables() {
@@ -112,6 +113,7 @@ export class DiasInhabilesComponent implements OnInit {
           console.log(result);
           console.table(this.diaInhabilEditable);
           this.eliminar(this.diaInhabilSeleccionado[0]);
+          this.limpiarVariables()
         }
       });
     }
@@ -145,6 +147,7 @@ export class DiasInhabilesComponent implements OnInit {
           console.log(result);
           console.table(this.diaInhabilModel);
           this.agregar();
+          this.limpiarVariables()
         }
       });
     }
@@ -167,6 +170,7 @@ export class DiasInhabilesComponent implements OnInit {
           console.log(result);
           console.table(this.diaInhabilEditable);
           this.editar();
+          this.limpiarVariables();
         }
       });
     }
@@ -177,9 +181,10 @@ export class DiasInhabilesComponent implements OnInit {
           console.log(response);
           this.listarNotariosParaDiaInhabil();
           if (response.code == 0) {
+            this.snackBar.open('Actualizado exitosamente','',{duration: 3000});
             this.status = 'ok';
           } else {
-            alert(response.description);
+            this.snackBar.open(response.description,'',{duration: 3000});
           }
         }, error => {
           let errorMessage = <any>error;
@@ -199,9 +204,10 @@ export class DiasInhabilesComponent implements OnInit {
           this.listarNotariosParaDiaInhabil();
           this.limpiarVariables();
           if (response.code == 0) {
+            this.snackBar.open('Agregado exitosamente','',{duration: 3000});
             this.status = 'ok';
           } else {
-            alert(response.description);
+            this.snackBar.open(response.description,'',{duration: 3000});
           }
         }, error => {
           let errorMessage = <any>error;
@@ -222,8 +228,10 @@ export class DiasInhabilesComponent implements OnInit {
             this.listarNotariosParaDiaInhabil();
             this.diaInhabilEditable = response;
             console.log(this.diaInhabilEditable)
+            this.snackBar.open('Eliminado exitosamente','',{duration: 3000});
             this.status = 'ok';
           } else {
+            this.snackBar.open(response.description,'',{duration: 3000});
             this.status = 'error';
           }
         }, error => {

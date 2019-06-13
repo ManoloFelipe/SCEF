@@ -30,8 +30,8 @@ export class InstanciaService {
     return this._http.patch(this.url + 'instancias/update', params, {headers: this.headers});
   }
 
-  crearInstancia(supervisor: Instancia):Observable<any>{
-    var params = JSON.stringify(supervisor)
+  crearInstancia(instancia: Instancia):Observable<any>{
+    var params = JSON.stringify(instancia)
     return this._http.post(this.url + 'instancias/create', params, {headers: this.headers});
   }
 

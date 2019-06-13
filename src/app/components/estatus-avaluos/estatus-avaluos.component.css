@@ -14,8 +14,8 @@
   }
   
   table {
-    width: 70%;
     margin: 0 auto;
+    width: 80%;
   }
 
   .buttons{
@@ -28,3 +28,7 @@
   .a{
     margin: 5px
   }
+
+  .centro{
+    text-align: center;
+}

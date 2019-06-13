@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject,ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { CobroAdicional } from 'src/app/models/cobro-adicional.model';
 import { CobroAdicionalService } from 'src/app/services/cobro-adicional.service';
 
@@ -16,7 +18,7 @@ export class CobrosAdicionalesComponent implements OnInit {
   public cobroAdicionalSeleccionado: number[];
   public status: string;
   public numeroPagina: number = 0;
-  public numeroItems: number = 7;
+  public numeroItems: number = 5;
   public primeraPagina: boolean;
   public ultimaPagina: boolean;
   public listarNumeroPagina: number = 0;
@@ -35,7 +37,7 @@ export class CobrosAdicionalesComponent implements OnInit {
   timeLeft: number;
   interval;
   
-  constructor(public dialog: MatDialog, private _notarioService: CobroAdicionalService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar,private _notarioService: CobroAdicionalService) {
     this.limpiarVariables();
   }
 
@@ -113,6 +115,7 @@ export class CobrosAdicionalesComponent implements OnInit {
         console.log(result);
         console.table(this.cobroAdicionalEditable);
         this.eliminar(this.cobroAdicionalSeleccionado[0]);
+        this.limpiarVariables()
       }
     });
   }
@@ -163,6 +166,7 @@ export class CobrosAdicionalesComponent implements OnInit {
         console.log(result);
         console.table(this.cobroAdicionaloModel);
         this.agregar();
+        this.limpiarVariables()
       }
     });
   }
@@ -193,6 +197,7 @@ export class CobrosAdicionalesComponent implements OnInit {
         console.log(result);
         console.table(this.cobroAdicionalEditable);
         this.editar();
+        this.limpiarVariables()
       }
     });
   }
@@ -203,9 +208,10 @@ export class CobrosAdicionalesComponent implements OnInit {
         console.log(response);
         this.listarCobrosAdicionalesParaTabla();
         if (response.code == 0) {
+          this.snackBar.open('Actualizado exitosamente','',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
@@ -224,9 +230,10 @@ export class CobrosAdicionalesComponent implements OnInit {
         console.log(response)
         this.listarCobrosAdicionalesParaTabla();
         if (response.code == 0) {
+          this.snackBar.open('Agregado exitosamente','',{duration: 3000});
           this.status = 'ok';
         } else {
-          alert(response.description);
+          this.snackBar.open(response.description,'',{duration: 3000});
         }
       }, error => {
         let errorMessage = <any>error;
@@ -247,8 +254,10 @@ export class CobrosAdicionalesComponent implements OnInit {
           this.listarCobrosAdicionalesParaTabla();
           this.cobroAdicionalEditable = response;
           console.log(this.cobroAdicionalEditable)
+          this.snackBar.open('Eliminado exitosamente','',{duration: 3000});
           this.status = 'ok';
         } else {
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'error';
         }
       }, error => {
@@ -261,6 +270,8 @@ export class CobrosAdicionalesComponent implements OnInit {
     );
   
   }
+
+  @ViewChild (MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
     this.listarCobrosAdicionalesParaTabla();
@@ -287,6 +298,7 @@ export class CobrosAdicionalesComponent implements OnInit {
           this.cobrosoAdicionales = response.content;
           this.dataSource2 = new MatTableDataSource<CobroAdicional>(this.cobrosoAdicionales);
           console.log(this.cobrosoAdicionales);
+          this.dataSource2.paginator = this.paginator;    
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.cantidadActual = response.numberOfElements;

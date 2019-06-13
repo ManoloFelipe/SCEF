@@ -1,18 +1,13 @@
-<form>
-    <mat-card class="centro">
-        <mat-card-title>Altas</mat-card-title>
-      </mat-card>
-
-  <h4>Codigo</h4>
-  <mat-form-field >
-    <input matInput placeholder="Codigo" [(ngModel)]="data.codigo"
-    [ngModelOptions]="{standalone: true}">
-  </mat-form-field>
-    
+<mat-card class="centro">
+  <mat-card-title> Agregar medios de Contacto</mat-card-title>
+</mat-card>
+<form>    
+    <h4>Codigo</h4>
+    <mat-form-field >
+      <input matInput placeholder="Codigo" [(ngModel)]="data.codigo"
+      [ngModelOptions]="{standalone: true}">
+    </mat-form-field>
     <br>
-    <br>
-
-
     <h4>Descripcion</h4>
     <mat-form-field >
       <input matInput placeholder="Descripcion categoria" [(ngModel)]="data.descripcion"
@@ -22,7 +17,7 @@
     <br>
   </form>
     
-<button mat-button [mat-dialog-close]="">No Thanks</button>
+<button mat-button [mat-dialog-close]="">Cancelar</button>
 <button type="submit" mat-button [mat-dialog-close]="data" cdkFocusInitial>Guardar</button>
 
 

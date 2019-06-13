@@ -1,4 +1,4 @@
-<mat-toolbar class="dialog" >Altas</mat-toolbar>
+<mat-toolbar>Altas</mat-toolbar>
 
 <form>
 <table class="centroTabla">
@@ -21,28 +21,33 @@
 </td>
 </tr>
 <tr>
+<td><h4>Afecto Saldo Capital:  </h4></td>
 <td>
-    <h4>Afecta Saldo Capita:</h4></td>
-<td>
-        <mat-checkbox value="S" [(ngModel)]="checked" [(ngModel)]="data.afectaSaldoCapital"
-        [ngModelOptions]="{standalone: true}">Si</mat-checkbox>
+    <mat-radio-group aria-labelledby="AfectaSaldoCapital" [(ngModel)]="data.afectaSaldoCapital" [ngModelOptions]="{standalone: true}">
+        <mat-radio-button style="margin-left: 5px" value="S"> SI </mat-radio-button>      
+        <mat-radio-button style="margin-left: 5px" value="N"> NO </mat-radio-button>
+      </mat-radio-group>
+      
         
 </td>
 </tr>
 <tr>
 <td><h4>Afecto Salto Interés:  </h4></td>
 <td>
-    <mat-checkbox value="S" [(ngModel)]="checked2" [(ngModel)]="data.afectaSaldoInteres"
-        [ngModelOptions]="{standalone: true}">Si</mat-checkbox>
+        <mat-radio-group aria-labelledby="AfectaSaldoInteres" [(ngModel)]="data.afectaSaldoInteres" [ngModelOptions]="{standalone: true}">
+            <mat-radio-button style="margin-left: 5px" value="S"> SI </mat-radio-button>      
+            <mat-radio-button style="margin-left: 5px" value="N"> NO </mat-radio-button>
+        </mat-radio-group>    
         
 </td>
 </tr>
 <tr>
 <td><h4>Afecto Saldo Mora:  </h4></td>
 <td>
-    <mat-checkbox value="S" [(ngModel)]="checked3" [(ngModel)]="data.afectaSaldoMora"
-        [ngModelOptions]="{standalone: true}">Si</mat-checkbox>
-        
+    <mat-radio-group aria-labelledby="AfectaSaldoMora" [(ngModel)]="data.afectaSaldoMora" [ngModelOptions]="{standalone: true}">
+        <mat-radio-button style="margin-left: 5px" value="S"> SI </mat-radio-button>      
+        <mat-radio-button style="margin-left: 5px" value="N"> NO </mat-radio-button>
+    </mat-radio-group>        
 </td>
 </tr>       
 

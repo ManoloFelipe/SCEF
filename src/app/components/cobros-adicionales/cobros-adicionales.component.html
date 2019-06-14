@@ -55,24 +55,22 @@ matRipple
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-      (click)="selection.toggle(row)">
-  </tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>
 </table>
 <mat-paginator [pageSizeOptions] = "[5, 10, 20]"  showFirstLastButtons > </mat-paginator> 
   <br>
   <br>
   <div class="centro">
-    <button title="home" mat-icon-button style=" background: #5F6A6A; margin-left: 12px" routerLink="home">
+    <button title="home" mat-icon-button style="color:white; background: #5F6A6A; margin-left: 12px" routerLink="home">
       <mat-icon>home</mat-icon>
     </button>
-    <button title="Agregar registro" mat-icon-button style=" background: #5F6A6A; margin-left: 12px" (click)='openDialog()' >
+    <button title="Agregar registro" mat-icon-button style="color:white; background: #5F6A6A; margin-left: 12px" (click)='openDialog()' >
         <mat-icon>note_add</mat-icon>
     </button>
-    <button title="Eliminar registro" mat-icon-button style=" background: #5F6A6A; margin-left: 12px"(click)="openDialogDelete()">
+    <button title="Eliminar registro" mat-icon-button style="color:white; background: #5F6A6A; margin-left: 12px"(click)="openDialogDelete()">
         <mat-icon>delete_sweep</mat-icon>
     </button>
-    <button title="Editar registro" mat-icon-button style=" background: #5F6A6A; margin-left: 12px" (click)="openDialogEdit()">
+    <button title="Editar registro" mat-icon-button style="color:white; background: #5F6A6A; margin-left: 12px" (click)="openDialogEdit()">
         <mat-icon>create</mat-icon>
     </button>
     

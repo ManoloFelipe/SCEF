@@ -15,3 +15,20 @@ button{
     font-weight: normal;
 }
 
+table{
+  width: 80%;
+  margin: 0 auto;
+}
+
+mat-paginator{
+  width: 80%;
+  margin: 0 auto;
+}
+
+mat-toolbar{
+  text-align: center
+}
+
+mat-card{
+  text-align: center
+}

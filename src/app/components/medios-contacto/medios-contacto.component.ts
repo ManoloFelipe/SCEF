@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject,ViewChild } from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import {MedioContacto} from 'src/app/models/medioContacto.model'
@@ -94,6 +95,7 @@ export class MediosContactoComponent implements OnInit {
   }
 
 
+  @ViewChild (MatPaginator) paginator: MatPaginator;
   ngOnInit() {
     this.listarMedioContactoParaTabla();
   }
@@ -104,12 +106,13 @@ export class MediosContactoComponent implements OnInit {
   }
 
   listarMedioContactoParaTabla(){
-    this._medioService.listarPagina(this.numeroPagina,this.numeroItems).subscribe(
+    this._medioService.listarPagina().subscribe(
       response=>{
         if(response.content){
           this.medios = response.content;
           this.dataSource2 = new MatTableDataSource<MedioContacto>(this.medios);
           console.log(this.medios);
+          this.dataSource2.paginator = this.paginator;
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.cantidadActual = response.numberOfElements;

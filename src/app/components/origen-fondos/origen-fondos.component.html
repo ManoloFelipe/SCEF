@@ -52,8 +52,7 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
   </tr>
 </table>
-
-<br>
+<mat-paginator [pageSizeOptions] = "[5, 10, 20]"  showFirstLastButtons > </mat-paginator> 
 <br>
 <div class="buttons">
   <button mat-icon-button style="color:white; background: #5F6A6A " class="a" routerLink="home">

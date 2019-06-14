@@ -1,7 +1,7 @@
-
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject,ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
+import {MatPaginator} from '@angular/material/paginator' ;
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { InstitucionCobroAdicional } from 'src/app/models/institucion-cobro-adicional.model';
@@ -92,17 +92,20 @@ export class InstitucionesCobrosAdicionalesComponent implements OnInit {
     });
   }
 
+  @ViewChild (MatPaginator) paginator: MatPaginator;
+
   ngOnInit() {
     this.listarInstitucionesCobroParaTabla()
   }
 
   listarInstitucionesCobroParaTabla(){
-    this._institucionService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+    this._institucionService.listarPagina().subscribe(
       response =>{
         if (response.content) {
           this.instituciones = response.content;
           this.dataSource2 = new MatTableDataSource<InstitucionCobroAdicional>(this.instituciones);
           console.log(this.instituciones);
+          this.dataSource2.paginator = this.paginator;   
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.listarNumeroPagina = response.numberOfElements;          

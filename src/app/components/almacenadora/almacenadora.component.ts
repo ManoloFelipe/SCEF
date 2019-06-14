@@ -96,6 +96,24 @@ export class AlmacenadoraComponent implements OnInit {
     });
   }
 
+  openDialogView(): void {
+    const dialogRef = this.dialog.open(VerAlmacenadora, {
+      width: '500px',
+      data: { codigo: this.almacenadoraEditable.codigo, descripcion: this.almacenadoraEditable.descripcion }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result != undefined) {
+        this.almacenadoraEditable.codigo = result.codigo;
+        this.almacenadoraEditable.descripcion = result.descripcion;
+        console.log(result);
+        console.table(this.almacenadoraEditable);
+
+      }
+    });
+  }
+
   @ViewChild (MatPaginator) paginator: MatPaginator;
   ngOnInit() {
     this.listarAlmacenadorasParaTabla();
@@ -332,6 +350,23 @@ export class DialogEliminarAlma {
 
   constructor(
     public dialogRef: MatDialogRef<DialogEliminarAlma>,
+    @Inject(MAT_DIALOG_DATA) public data: Almacenadora) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'ver-almacenadora.component.html',
+  styleUrls: ['./almacenadora.component.css']
+})
+export class VerAlmacenadora {
+
+  constructor(
+    public dialogRef: MatDialogRef<VerAlmacenadora>,
     @Inject(MAT_DIALOG_DATA) public data: Almacenadora) { }
 
   onNoClick(): void {

@@ -13,8 +13,8 @@ export class FormaDesembolsoService {
     this.url = GLOBAL.url;
   }
 
-  listarPagina(numeroPagina, numeroItems):Observable<any> {
-    return this._http.get(this.url + 'formaDesembolso/listPage?page='+numeroPagina+'&size='+numeroItems,{headers: this.headers});
+  listarPagina():Observable<any> {
+    return this._http.get(this.url + 'formaDesembolso/listPage',{headers: this.headers});
   }
 
   listarFormaDes(id):Observable<any>{

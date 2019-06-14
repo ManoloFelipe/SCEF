@@ -23,7 +23,6 @@
   <br>
   <br>
 <table mat-table (click)="imprimir()" [dataSource]="dataSource2" class="mat-elevation-z8">
-
   <!-- Checkbox Column -->
   <ng-container matColumnDef="select">
     <th mat-header-cell *matHeaderCellDef>
@@ -59,6 +58,7 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
   </tr>
 </table>
+<mat-paginator [pageSizeOptions] = "[5, 10, 20]"  showFirstLastButtons > </mat-paginator> 
   <br>
   <div class="buttons">
       <button mat-icon-button style="color:white; background: #5F6A6A " class="a" routerLink="home">

@@ -59,7 +59,7 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
   </tr>
 </table>
-
+<mat-paginator [pageSizeOptions] = "[5, 10, 20]"  showFirstLastButtons > </mat-paginator> 
 <!-- <button mat-icon-button style="color:white; background: #5F6A6A " class="a" (click)="siguientePagina()">
   <mat-icon>home</mat-icon>
 </button>
@@ -81,7 +81,7 @@
   <button mat-icon-button style="color:white; background: #5F6A6A " class="a" (click)="openDialogEdit()">
     <mat-icon>create</mat-icon>
   </button>
-  <button mat-icon-button style="color:white; background: #5F6A6A " class="a" (click)="openDialogView()">
+  <!-- <button mat-icon-button style="color:white; background: #5F6A6A " class="a" (click)="openDialogView()">
     <mat-icon>pageview</mat-icon>
-  </button>
+  </button> -->
 </div>

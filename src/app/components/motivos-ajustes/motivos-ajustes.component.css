@@ -19,11 +19,7 @@
 	top: 0; /* Posicionamos la cabecera pegada arriba */
 }
 
-.dialog{
-  background: #273746;
-  color: white;
-  
-}
+
 
 .example-full-width {
   width: 100%;
@@ -43,11 +39,6 @@
   display:scroll;
   position:fixed;
   right:0px;
-  }
-
-  .centroTabla {
-    margin: 0 auto;
-    width: 80%;
   }
 
 .busqueda {

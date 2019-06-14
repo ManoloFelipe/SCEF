@@ -22,11 +22,6 @@
 	position: fixed; /* Hacemos que la cabecera tenga una posición fija */
 }
 
-.dialog{
-  background: #273746;
-  color: white;
-  
-}
 
 .example-full-width {
   width: 100%;
@@ -38,10 +33,7 @@
     text-align: center;    
 }
 
-.centroTabla {
-  margin: 0 auto;
-    width: 80%;
-}
+
 
 .busqueda {
   margin: auto;

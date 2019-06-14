@@ -1,9 +1,6 @@
-
-<form class="example-form">
-  <h2>¿Está seguro de eliminar este dato?</h2>
-</form>
+<h2>¿Está seguro de eliminar este dato?</h2>
 <hr>
   <div mat-dialog-actions>
     <button mat-button  (click)="onNoClick()">Cancelar</button>
-    <button mat-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>Eliminar</button>
+    <button mat-button  [mat-dialog-close]="data" cdkFocusInitial>Eliminar</button>
   </div>

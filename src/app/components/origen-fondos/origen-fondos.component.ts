@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { OrigenFondos } from 'src/app/models/origen-fondos.model';
@@ -93,6 +94,8 @@ export class OrigenFondosComponent implements OnInit {
     });
   }
 
+  @ViewChild (MatPaginator) paginator: MatPaginator;
+
   ngOnInit() {
     this.listarAlmacenadorasParaTabla();
   }
@@ -117,12 +120,13 @@ export class OrigenFondosComponent implements OnInit {
   }
 
   listarAlmacenadorasParaTabla() {
-    this._almacenadoraService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+    this._almacenadoraService.listarPagina().subscribe(
       response => {
         if (response.content) {
           this.almacenadoras = response.content;
           this.dataSource2 = new MatTableDataSource<OrigenFondos>(this.almacenadoras);
           console.log(this.almacenadoras);
+          this.dataSource2.paginator = this.paginator;
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.listarNumeroPagina = response.numberOfElements;

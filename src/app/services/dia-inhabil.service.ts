@@ -21,7 +21,7 @@ export class DiaInhabilService {
   }
 
   listarDiaInhabil(fechaFeriado, tipoFeriado):Observable<any>{
-    return this._http.get(this.url + 'diasNoHabilesNoCobroMora/read?empresa=1&fechaFeriado='+fechaFeriado+'tipoFeriado='+tipoFeriado);
+    return this._http.get(this.url + 'diasNoHabilesNoCobroMora/read?empresa=1&fechaFeriado='+fechaFeriado+'tipoFeriado='+tipoFeriado,{headers: this.headers});
   }
 
   eliminarDiaInhabil(id):Observable<any>{

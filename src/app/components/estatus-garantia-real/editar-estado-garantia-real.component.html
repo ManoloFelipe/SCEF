@@ -1,4 +1,6 @@
-<mat-toolbar color="primary" class="encabezado">Editar Estado Garantia</mat-toolbar>
+<mat-card class="centro">
+  <mat-card-title>Cambios</mat-card-title>
+</mat-card>
 <br>
 <div mat-dialog-content>  
       <mat-form-field>
@@ -10,6 +12,6 @@
       </mat-form-field>
     </div>  
   <div mat-dialog-actions>
-    <button mat-button color="primary" (click)="onNoClick()">Cancelar</button>
-    <button mat-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>Editar</button>
+    <button mat-button (click)="onNoClick()">Cancelar</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Editar</button>
   </div>

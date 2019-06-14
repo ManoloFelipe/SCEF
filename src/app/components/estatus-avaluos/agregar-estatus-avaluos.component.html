@@ -1,4 +1,6 @@
-<mat-toolbar color="primary" class="encabezado">Agregar Estaus Avaluos</mat-toolbar>
+<mat-card class="centro">
+  <mat-card-title>Nuevo</mat-card-title>
+</mat-card>
 <br>
 <br>
 <div mat-dialog-content>
@@ -11,6 +13,6 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions>
-    <button mat-button color="primary" (click)="onNoClick()">Cancelar</button>
-    <button mat-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>Agregar</button>
+    <button mat-button (click)="onNoClick()">Cancelar</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Agregar</button>
   </div>

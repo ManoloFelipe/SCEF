@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { Poder } from 'src/app/models/poder.model';
@@ -109,6 +110,8 @@ export class PoderComponent implements OnInit {
     });
   }
 
+  @ViewChild (MatPaginator) paginator: MatPaginator;
+
   ngOnInit() {
     this.listarPoderesParaTabla();
   }
@@ -133,12 +136,13 @@ export class PoderComponent implements OnInit {
   }
 
   listarPoderesParaTabla() {
-    this._poderService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+    this._poderService.listarPagina().subscribe(
       response => {
         if (response.content) {
           this.poderes = response.content;
           this.dataSource2 = new MatTableDataSource<Poder>(this.poderes);
           console.log(this.poderes);
+          this.dataSource2.paginator = this.paginator;
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.listarNumeroPagina = response.numberOfElements;

@@ -15,12 +15,6 @@
         width: 100%;
       }
     
-      table{
-        position: relative;
-        margin: 0 auto;
-        width: 80%;
-      }
-    
       mat-card mat-card-title{
         text-align: center;
       }

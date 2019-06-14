@@ -13,8 +13,8 @@ export class PoderService {
     this.url = GLOBAL.url;
   }
 
-  listarPagina(numeroPagina, numeroItems):Observable<any> {
-    return this._http.get(this.url + 'poder/listPage?page='+numeroPagina+'&size='+numeroItems+'&sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers});
+  listarPagina():Observable<any> {
+    return this._http.get(this.url + 'poder/listPage?sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers});
   }
 
   listarPoder(id):Observable<any>{

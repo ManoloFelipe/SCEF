@@ -25,6 +25,24 @@ export class CobrosAdicionalesComponent implements OnInit {
   public cantidadActual: number;
   public cobroAdicionaloModel: CobroAdicional;
   public cobroAdicionalEditable: CobroAdicional;
+
+  public polizaColectiva: string;
+  public seUsaEnFianza: string;
+  public acumulaPeriodos: string;
+  public pagosAterceros: string;
+  public provisiona: string;  
+  public incluyeCalculoInteres: string;
+  public incluyeCalculoMora: string;
+  public incluyeEnCapital: string;
+  public inclusionComprobada: string;
+  public calculoFlatAlVencimiento: string;
+  public paraCalculoDeMora: string;
+  public repPagoTercero: string;
+  public utilizaCodeudor: string;
+  public asociaSeguros: string;
+  public opcionAcompra: string;
+  public utilizaFactorDivisorParaCalculoFlat: string;
+  
   mostrar: Boolean;
   centered = false;
   disabled = false;
@@ -76,16 +94,27 @@ export class CobrosAdicionalesComponent implements OnInit {
     openDialogDelete(): void {
     const dialogRef = this.dialog.open(DialogEliminarCobroAdicional, {
       width: '500px',
-      data: { codigo: this.cobroAdicionalEditable.codigo, acumulaPeriodos: this.cobroAdicionalEditable.acumulaPeriodos,
-        asociaSeguros: this.cobroAdicionalEditable.asociaSeguros, calculoFlatAlVencimiento: this.cobroAdicionalEditable.calculoFlatAlVencimiento,
-        descripcion: this.cobroAdicionalEditable.descripcion, descripcionCorta: this.cobroAdicionalEditable.descripcionCorta,
-        formatoImpresion: this.cobroAdicionalEditable.formatoImpresion, inclusionComprobada: this.cobroAdicionalEditable.inclusionComprobada,
-        incluyeCalculoInteres: this.cobroAdicionalEditable.incluyeCalculoInteres, incluyeCalculoMora: this.cobroAdicionalEditable.incluyeCalculoMora,
-        incluyeEnCapital: this.cobroAdicionalEditable.incluyeEnCapital, opcionAcompra: this.cobroAdicionalEditable.opcionAcompra,
-        pagosAterceros: this.cobroAdicionalEditable.pagosAterceros, paraCalculoDeMora: this.cobroAdicionalEditable.paraCalculoDeMora,
-        polizaColectiva: this.cobroAdicionalEditable.polizaColectiva, provisiona: this.cobroAdicionalEditable.provisiona,  
-        repPagoTercero: this.cobroAdicionalEditable.repPagoTercero, seUsaEnFianza: this.cobroAdicionalEditable.seUsaEnFianza,  
-        utilizaCodeudor: this.cobroAdicionalEditable.utilizaCodeudor, utilizaFactorDivisorParaCalculoFlat: this.cobroAdicionalEditable.utilizaFactorDivisorParaCalculoFlat,  
+      data: { 
+        codigo: this.cobroAdicionalEditable.codigo, 
+        acumulaPeriodos: this.cobroAdicionalEditable.acumulaPeriodos,
+        asociaSeguros: this.cobroAdicionalEditable.asociaSeguros, 
+        calculoFlatAlVencimiento: this.cobroAdicionalEditable.calculoFlatAlVencimiento,
+        descripcion: this.cobroAdicionalEditable.descripcion,
+        descripcionCorta: this.cobroAdicionalEditable.descripcionCorta,
+        formatoImpresion: this.cobroAdicionalEditable.formatoImpresion,
+        inclusionComprobada: this.cobroAdicionalEditable.inclusionComprobada,
+        incluyeCalculoInteres: this.cobroAdicionalEditable.incluyeCalculoInteres,
+        incluyeCalculoMora: this.cobroAdicionalEditable.incluyeCalculoMora,
+        incluyeEnCapital: this.cobroAdicionalEditable.incluyeEnCapital, 
+        opcionAcompra: this.cobroAdicionalEditable.opcionAcompra,
+        pagosAterceros: this.cobroAdicionalEditable.pagosAterceros,
+        paraCalculoDeMora: this.cobroAdicionalEditable.paraCalculoDeMora,
+        polizaColectiva: this.cobroAdicionalEditable.polizaColectiva, 
+        provisiona: this.cobroAdicionalEditable.provisiona,  
+        repPagoTercero: this.cobroAdicionalEditable.repPagoTercero,
+        seUsaEnFianza: this.cobroAdicionalEditable.seUsaEnFianza,  
+        utilizaCodeudor: this.cobroAdicionalEditable.utilizaCodeudor, 
+        utilizaFactorDivisorParaCalculoFlat: this.cobroAdicionalEditable.utilizaFactorDivisorParaCalculoFlat,  
       }
     });
 
@@ -122,17 +151,27 @@ export class CobrosAdicionalesComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogCobroAdicional, {
-      width: '60%',
-      data: { codigo: this.cobroAdicionalEditable.codigo, acumulaPeriodos: this.cobroAdicionalEditable.acumulaPeriodos,
-        asociaSeguros: this.cobroAdicionalEditable.asociaSeguros, calculoFlatAlVencimiento: this.cobroAdicionalEditable.calculoFlatAlVencimiento,
-        descripcion: this.cobroAdicionalEditable.descripcion, descripcionCorta: this.cobroAdicionalEditable.descripcionCorta,
-        formatoImpresion: this.cobroAdicionalEditable.formatoImpresion, inclusionComprobada: this.cobroAdicionalEditable.inclusionComprobada,
-        incluyeCalculoInteres: this.cobroAdicionalEditable.incluyeCalculoInteres, incluyeCalculoMora: this.cobroAdicionalEditable.incluyeCalculoMora,
-        incluyeEnCapital: this.cobroAdicionalEditable.incluyeEnCapital, opcionAcompra: this.cobroAdicionalEditable.opcionAcompra,
-        pagosAterceros: this.cobroAdicionalEditable.pagosAterceros, paraCalculoDeMora: this.cobroAdicionalEditable.paraCalculoDeMora,
-        polizaColectiva: this.cobroAdicionalEditable.polizaColectiva, provisiona: this.cobroAdicionalEditable.provisiona,  
-        repPagoTercero: this.cobroAdicionalEditable.repPagoTercero, seUsaEnFianza: this.cobroAdicionalEditable.seUsaEnFianza,  
-        utilizaCodeudor: this.cobroAdicionalEditable.utilizaCodeudor, utilizaFactorDivisorParaCalculoFlat: this.cobroAdicionalEditable.utilizaFactorDivisorParaCalculoFlat,  
+      width: '500px',
+      data: { 
+        codigo: this.cobroAdicionaloModel.codigo, 
+        descripcion: this.cobroAdicionaloModel.descripcion,
+        formatoImpresion: this.cobroAdicionaloModel.formatoImpresion, 
+        acumulaPeriodos: this.acumulaPeriodos,
+        asociaSeguros: this.asociaSeguros, 
+        calculoFlatAlVencimiento: this.calculoFlatAlVencimiento,                 
+        inclusionComprobada: this.inclusionComprobada,
+        incluyeCalculoInteres: this.incluyeCalculoInteres, 
+        incluyeCalculoMora: this.incluyeCalculoMora,
+        incluyeEnCapital: this.incluyeEnCapital, 
+        opcionAcompra: this.opcionAcompra,
+        pagosAterceros: this.pagosAterceros, 
+        paraCalculoDeMora: this.paraCalculoDeMora,
+        polizaColectiva: this.polizaColectiva, 
+        provisiona: this.provisiona,  
+        repPagoTercero: this.repPagoTercero, 
+        seUsaEnFianza: this.seUsaEnFianza,  
+        utilizaCodeudor: this.utilizaCodeudor, 
+        utilizaFactorDivisorParaCalculoFlat: this.utilizaFactorDivisorParaCalculoFlat,  
       }
     });
 
@@ -165,8 +204,7 @@ export class CobrosAdicionalesComponent implements OnInit {
         this.cobroAdicionaloModel.utilizaFactorDivisorParaCalculoFlat = result.utilizaFactorDivisorParaCalculoFlat;
         console.log(result);
         console.table(this.cobroAdicionaloModel);
-        this.agregar();
-        this.limpiarVariables()
+        this.agregar();        
       }
     });
   }
@@ -193,11 +231,30 @@ export class CobrosAdicionalesComponent implements OnInit {
         this.cobroAdicionalEditable.codigo  = result.codigo;
         this.cobroAdicionalEditable.descripcion = result.descripcion;
         this.cobroAdicionalEditable.descripcionCorta = result.descripcionCorta;
+        this.cobroAdicionalEditable.codigo  = result.codigo;
+        this.cobroAdicionalEditable.descripcion = result.descripcion;
+        this.cobroAdicionalEditable.descripcionCorta = result.descripcionCorta;
+        this.cobroAdicionalEditable.acumulaPeriodos  = result.acumulaPeriodos;
+        this.cobroAdicionalEditable.asociaSeguros = result.asociaSeguros;
+        this.cobroAdicionalEditable.calculoFlatAlVencimiento = result.calculoFlatAlVencimiento;
+        this.cobroAdicionalEditable.formatoImpresion  = result.formatoImpresion;
+        this.cobroAdicionalEditable.inclusionComprobada = result.inclusionComprobada;
+        this.cobroAdicionalEditable.incluyeCalculoInteres = result.incluyeCalculoInteres;
+        this.cobroAdicionalEditable.incluyeCalculoMora  = result.incluyeCalculoMora;
+        this.cobroAdicionalEditable.incluyeEnCapital = result.incluyeEnCapital;
+        this.cobroAdicionalEditable.opcionAcompra = result.opcionAcompra;
+        this.cobroAdicionalEditable.pagosAterceros = result.pagosAterceros;
+        this.cobroAdicionalEditable.paraCalculoDeMora = result.paraCalculoDeMora;
+        this.cobroAdicionalEditable.polizaColectiva  = result.polizaColectiva;
+        this.cobroAdicionalEditable.repPagoTercero = result.repPagoTercero;
+        this.cobroAdicionalEditable.provisiona = result.provisiona;
+        this.cobroAdicionalEditable.seUsaEnFianza  = result.seUsaEnFianza;
+        this.cobroAdicionalEditable.utilizaCodeudor = result.utilizaCodeudor;
+        this.cobroAdicionalEditable.utilizaFactorDivisorParaCalculoFlat = result.utilizaFactorDivisorParaCalculoFlat;
 
         console.log(result);
         console.table(this.cobroAdicionalEditable);
-        this.editar();
-        this.limpiarVariables()
+        this.editar();        
       }
     });
   }
@@ -208,7 +265,7 @@ export class CobrosAdicionalesComponent implements OnInit {
         console.log(response);
         this.listarCobrosAdicionalesParaTabla();
         if (response.code == 0) {
-          this.snackBar.open('Actualizado exitosamente','',{duration: 3000});
+          this.snackBar.open(response.description,'',{duration: 3000});
           this.status = 'ok';
         } else {
           this.snackBar.open(response.description,'',{duration: 3000});

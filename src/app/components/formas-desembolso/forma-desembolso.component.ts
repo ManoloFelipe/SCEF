@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject,ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { FormaDesembolso } from 'src/app/models/forma-desembolso.model';
@@ -113,6 +114,8 @@ export class FormasDesembolsoComponent implements OnInit {
     });
   }
 
+  @ViewChild (MatPaginator) paginator: MatPaginator;
+
   ngOnInit() {
     this.listarPoderesParaTabla();
   }
@@ -137,12 +140,13 @@ export class FormasDesembolsoComponent implements OnInit {
   }
 
   listarPoderesParaTabla() {
-    this._formaDesService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+    this._formaDesService.listarPagina().subscribe(
       response => {
         if (response.content) {
           this.formas = response.content;
           this.dataSource2 = new MatTableDataSource<FormaDesembolso>(this.formas);
           console.log(this.formas);
+          this.dataSource2.paginator = this.paginator;   
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.listarNumeroPagina = response.numberOfElements;

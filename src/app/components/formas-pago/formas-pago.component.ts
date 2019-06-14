@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject,ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormasPago } from 'src/app/models/formas-pago.model';
 import {MatSnackBar} from  '@angular/material/snack-bar' ;
@@ -95,6 +96,8 @@ export class FormasPagoComponent implements OnInit {
     });
   }
 
+  @ViewChild (MatPaginator) paginator: MatPaginator;
+
   ngOnInit() {
     this.listarAlmacenadorasParaTabla();
   }
@@ -119,12 +122,13 @@ export class FormasPagoComponent implements OnInit {
   }
 
   listarAlmacenadorasParaTabla() {
-    this._formasService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+    this._formasService.listarPagina().subscribe(
       response => {
         if (response.content) {
           this.formasdepago = response.content;
           this.dataSource2 = new MatTableDataSource<FormasPago>(this.formasdepago);
           console.log(this.formasdepago);
+          this.dataSource2.paginator = this.paginator;   
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.listarNumeroPagina = response.numberOfElements;

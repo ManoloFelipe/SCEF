@@ -20,7 +20,7 @@
   <br>
   <br>
 
-<table width="80%" mat-table (click)="imprimir()" [dataSource]="dataSource2" class="centroTabla">
+<table mat-table (click)="imprimir()" [dataSource]="dataSource2" class="centroTabla">
 
   <!-- Checkbox Column -->
   <ng-container matColumnDef="select">
@@ -53,7 +53,7 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
   </tr>
 </table>
-  <br>
+<mat-paginator [pageSizeOptions] = "[5, 10, 20]"  showFirstLastButtons > </mat-paginator> 
   <br>
 
 <div class="buttons">

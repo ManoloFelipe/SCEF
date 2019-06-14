@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { MotivoAjuste } from 'src/app/models/motivo-ajuste.model';
@@ -196,7 +197,7 @@ export class MotivosAjustesComponent implements OnInit {
 
   openDialogEliminar(): void {
     const dialogRef = this.dialog.open(DialogEliminarMotivoAjuste, {
-      width: '600px', 
+      width: '500px', 
       data: {afectaSaldoCapital: this.motivoAjusteEditable.afectaSaldoCapital,
         afectaSaldoInteres: this.motivoAjusteEditable.afectaSaldoInteres,
         afectaSaldoMora: this.motivoAjusteEditable.afectaSaldoMora,
@@ -299,6 +300,7 @@ export class MotivosAjustesComponent implements OnInit {
   
   }
 
+  @ViewChild (MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
     this.listarMotivosAjustesParaTabla();
@@ -319,12 +321,13 @@ export class MotivosAjustesComponent implements OnInit {
   }
 
   listarMotivosAjustesParaTabla() {
-    this._motivoAjusteService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+    this._motivoAjusteService.listarPagina().subscribe(
       response => {
         if (response.content) {
           this.motivosAjustes = response.content;
           this.dataSource2 = new MatTableDataSource<MotivoAjuste>(this.motivosAjustes);
           console.log(this.motivosAjustes);
+          this.dataSource2.paginator = this.paginator;
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.cantidadActual = response.numberOfElements;

@@ -31,7 +31,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   
   // {descripcion: 'Datos Generales de Registro y Control', enlace:'datosGeneralesRC'},
   {descripcion: 'Destinos', enlace:'destinos'},
-  {descripcion: 'Dias Inhabiles', enlace:'diasInhabiles'},
+  // {descripcion: 'Dias Inhabiles', enlace:'diasInhabiles'},
   // {descripcion: 'Documentos por Producto', enlace:'documentosProducto'},
   
   // {descripcion: 'Enlaces de Contabilidad', enlace:'enlaceContabilidad'},

@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject,ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { Notario } from 'src/app/models/notarios.models';
@@ -244,6 +245,8 @@ startTimer() {
   
   }
 
+  @ViewChild (MatPaginator) paginator: MatPaginator;
+
   ngOnInit() {
     this.listarNotariosParaTabla();
   }
@@ -264,12 +267,13 @@ startTimer() {
   }
 
   listarNotariosParaTabla() {
-    this._notarioService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+    this._notarioService.listarPagina().subscribe(
       response => {
         if (response.content) {
           this.notarios = response.content;
           this.dataSource2 = new MatTableDataSource<Notario>(this.notarios);
           console.log(this.notarios);
+          this.dataSource2.paginator = this.paginator;
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.cantidadActual = response.numberOfElements;

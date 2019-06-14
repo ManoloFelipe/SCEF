@@ -16,8 +16,8 @@ export class NotarioService {
     this.url = GLOBAL.url;
   }
 
-  listarPagina(numeroPagina, numeroItems):Observable<any>{
-    return this._http.get(this.url + 'abogadosNotarios/listPage?page='+numeroPagina+'&size='+numeroItems+'&sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers});
+  listarPagina():Observable<any>{
+    return this._http.get(this.url + 'abogadosNotarios/listPage?sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers});
   }
 
   listarNotario(id):Observable<any>{

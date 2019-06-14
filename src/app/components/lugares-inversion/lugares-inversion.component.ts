@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject} from '@angular/core';
+import { Component, OnInit, Inject, ViewChild} from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import {LugarInversionService} from 'src/app/services/lugar-inversion.service'
@@ -96,6 +97,7 @@ export class LugaresInversionComponent implements OnInit {
     });
   }
   
+  @ViewChild (MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
     this.listarLugarInversionParaTabla();
@@ -107,12 +109,13 @@ export class LugaresInversionComponent implements OnInit {
   }
 
   listarLugarInversionParaTabla(){
-    this._lugarService.listarPagina(this.numeroPagina,this.numeroItems).subscribe(
+    this._lugarService.listarPagina().subscribe(
       response =>{
         if(response.content){
           this.lugares = response.content;
           this.dataSource2 = new MatTableDataSource<LugarInversion>(this.lugares);
           console.log(this.lugares);
+          this.dataSource2.paginator = this.paginator;
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.cantidadActual = response.numberOfElements;

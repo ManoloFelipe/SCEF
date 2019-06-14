@@ -303,7 +303,7 @@ export class DiasInhabilesComponent implements OnInit {
     console.log(this.diaInhabilSeleccionado[0]);
     console.log(this.diaInhabilSeleccionado2[0]);
     if (this.diaInhabilSeleccionado[0]) {
-      this.setNotario(this.diaInhabilSeleccionado[0],this.diaInhabilSeleccionado2[0]);
+      this.setNotario(this.diaInhabilSeleccionado[0].toDateString,this.diaInhabilSeleccionado2[0]);
     }
     //    console.table(this.selection.selected)
   }

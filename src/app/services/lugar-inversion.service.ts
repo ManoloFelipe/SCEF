@@ -12,8 +12,8 @@ constructor(private _http:HttpClient) {
   this.url = GLOBAL.url;
  }
 
- listarPagina(numeroPagina,numeroItems):Observable<any>{
-   return this._http.get(this.url+'lugar/listPage?page='+numeroPagina+'&size='+numeroItems+'&sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers})
+ listarPagina():Observable<any>{
+   return this._http.get(this.url+'lugar/listPage?sort=id.codigo,asc&query=id.empresa==1',{headers: this.headers})
  }
 
  listarLugarInversion(id):Observable<any>{

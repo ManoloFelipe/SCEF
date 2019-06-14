@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject,ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator' ;
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {MatSnackBar} from  '@angular/material/snack-bar' ;
 import { Instancia } from 'src/app/models/instancia.model';
@@ -40,13 +41,13 @@ export class InstanciaComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(CrearInstancia, {
       width: '500px',
-      data: { codigoInstancia: this.instanciaModel.codigoInstancia, descripcion: this.instanciaModel.descripcion }
+      data: { codigoInstancia: this.instanciaModel.codigo, descripcion: this.instanciaModel.descripcion }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result != undefined) {
-        this.instanciaModel.codigoInstancia = result.codigoInstancia;
+        this.instanciaModel.codigo = result.codigoInstancia;
         this.instanciaModel.descripcion = result.descripcion;
         console.log(result);
         console.table(this.instanciaModel);
@@ -60,13 +61,14 @@ export class InstanciaComponent implements OnInit {
   openDialogEdit(): void {
     const dialogRef = this.dialog.open(ActualizarInstancia, {
       width: '500px',
-      data: { codigoInstancia: this.instanciaEditable.codigoInstancia, descripcion: this.instanciaEditable.descripcion }
+      data: { codigoInstancia: this.instanciaSeleccionada[0], descripcion: this.instanciaEditable.descripcion }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      console.log(result.codigoInstancia);
       if (result != undefined) {
-        this.instanciaEditable.codigoInstancia = result.codigoInstancia;
+        this.instanciaEditable.codigo = result.codigoInstancia;
         this.instanciaEditable.descripcion = result.descripcion;
         console.log(result);
         console.table(this.instanciaEditable);
@@ -79,13 +81,13 @@ export class InstanciaComponent implements OnInit {
   openDialogView(): void {
     const dialogRef = this.dialog.open(VerInstancia, {
       width: '500px',
-      data: { codigoInstancia: this.instanciaEditable.codigoInstancia, descripcion: this.instanciaEditable.descripcion }
+      data: { codigoInstancia: this.instanciaSeleccionada[0], descripcion: this.instanciaEditable.descripcion }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result != undefined) {
-        this.instanciaEditable.codigoInstancia = result.codigoInstancia;
+        this.instanciaEditable.codigo = result.codigoInstancia;
         this.instanciaEditable.descripcion = result.descripcion;
         console.log(result);
         console.table(this.instanciaEditable);
@@ -97,13 +99,13 @@ export class InstanciaComponent implements OnInit {
   openDialogDelete(): void {
     const dialogRef = this.dialog.open(EliminarInstancia, {
       width: '500px',
-      data: { codigoInstancia: this.instanciaEditable.codigoInstancia, descripcion: this.instanciaEditable.descripcion }
+      data: { codigoInstancia: this.instanciaEditable.codigo, descripcion: this.instanciaEditable.descripcion }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result != undefined) {
-        this.instanciaEditable.codigoInstancia = result.codigoInstancia;
+        this.instanciaEditable.codigo = result.codigoInstancia;
         this.instanciaEditable.descripcion = result.descripcion;
         console.log(result);
         console.table(this.instanciaEditable);
@@ -112,6 +114,8 @@ export class InstanciaComponent implements OnInit {
       }
     });
   }
+
+  @ViewChild (MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
     this.listarInstanciasParaTabla();
@@ -137,12 +141,13 @@ export class InstanciaComponent implements OnInit {
   }
 
   listarInstanciasParaTabla() {
-    this._instanciaService.listarPagina(this.numeroPagina, this.numeroItems).subscribe(
+    this._instanciaService.listarPagina().subscribe(
       response => {
         if (response.content) {
           this.instancias = response.content;
           this.dataSource2 = new MatTableDataSource<Instancia>(this.instancias);
           console.log(this.instancias);
+          this.dataSource2.paginator = this.paginator;
           this.primeraPagina = response.first;
           this.ultimaPagina = response.last;
           this.listarNumeroPagina = response.numberOfElements;
@@ -248,7 +253,7 @@ export class InstanciaComponent implements OnInit {
     );
   
   }
-
+ 
   displayedColumns: string[] = ['select', 'codigoInstancia', 'descripcion'];
   dataSource = new MatTableDataSource<Instancia>(this.instancias);
   selection = new SelectionModel<Instancia>(false, []);
@@ -281,7 +286,7 @@ export class InstanciaComponent implements OnInit {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.codigoInstancia + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.codigo + 1}`;
   }
 }
 

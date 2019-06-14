@@ -6,5 +6,6 @@ export class Instancia{
         public description:	string,
         public empresa:	string,
         public errorCore: boolean,
+        public codigoInstancia? : string,
     ) {}
 }
